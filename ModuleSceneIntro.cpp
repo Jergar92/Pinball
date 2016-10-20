@@ -28,7 +28,7 @@ bool ModuleSceneIntro::Start()
 	
 	background = App->textures->Load("pinball/pinball_back.png");
 	ball = App->textures->Load("pinball/ball.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	lapid4= App->textures->Load("pinball/sprites/Lapid_4_Ok.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
 
@@ -198,15 +198,22 @@ bool ModuleSceneIntro::Start()
 	chains.add(App->physics->CreateChain(0, 0, flip_4, 24, 0));
 	chains.add(App->physics->CreateChain(0, 0, flip_5, 24, 0));
 
-	circles.add(App->physics->CreateCircle(305, 780, 6, 1, ball));
+	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0,ball));
 
 	//ADD GRAVES
 
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0));
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0));
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0));
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1));
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1));
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1));
+	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1));
+	circles.add(App->physics->CreateCircle(260, 390, 17, 0, 1));
 
-
+	circles.add(App->physics->CreateCircle(27, 630, 17, 0, 1));
+	circles.add(App->physics->CreateCircle(98, 640, 17, 0, 1));
+	circles.add(App->physics->CreateCircle(240, 607, 17, 0, 1));
+	circles.add(App->physics->CreateCircle(45, 684, 17, 0, 1));
+	circles.add(App->physics->CreateCircle(207, 653, 17, 0, 1));
+	circles.add(App->physics->CreateCircle(258, 680, 17, 0, 1));
 
 	return ret;
 }
@@ -224,14 +231,20 @@ update_status ModuleSceneIntro::Update()
 {
 
 	SDL_Rect backgr_rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-	SDL_Rect ball_rect = { 0, 0, 27, 28 };
+	
 	App->renderer->Blit(background, 0, 0, &backgr_rect);
-	App->renderer->Blit(circles.getFirst()->data->texture, 0, 0, &ball_rect);
 
+	for(p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it=it->next)
+	{ 
+		//TODO
+		/*b2Vec2 pos = it->data->body->GetPosition();
+		SDL_Rect rect = it->data->texture;
+	    App->renderer->Blit(circles.getFirst()->data->texture, METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), &ball_rect);*/
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -120), true);
+		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 
 	//sensor->listener->OnCollision(circles.getFirst()->data, );

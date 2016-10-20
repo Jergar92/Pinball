@@ -57,7 +57,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, SDL_Texture* text)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, int restitution, SDL_Texture* text)
 {
 	b2BodyDef body;
 	switch (type)
@@ -81,6 +81,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, SDL_Te
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	fixture.restitution = restitution;
 
 	b->CreateFixture(&fixture);
 
@@ -283,20 +284,48 @@ update_status ModulePhysics::PostUpdate()
 				break;
 			}
 
-			// TODO 1: If mouse button 1 is pressed ...
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
-				// test if the current body contains mouse position
-				b2Vec2 point(App->input->GetMouseX(), App->input->GetMouseY());
-				bool hit;
-				b2Transform transform = b->GetTransform();
-				b2Shape* shape = f->GetShape();
-				hit = shape->TestPoint(transform, PIXEL_TO_METERS(point));
-				
-				if (hit == true)
+				b2Vec2 mouse_pos(App->input->GetMouseX(), App->input->GetMouseY());
+
+
+				bool hit = f->TestPoint(PIXEL_TO_METERS(mouse_pos));
+
+				if (hit)
 				{
 					clicked_object = b;
+					b2MouseJointDef def;
+					b2Vec2 mouse_pos(App->input->GetMouseX(), App->input->GetMouseY());
+					def.bodyA = ground;
+					def.bodyB = clicked_object;
+					def.target = PIXEL_TO_METERS(mouse_pos);
+					def.dampingRatio = 0.5f;
+					def.frequencyHz = 2.0f;
+
+					def.maxForce = 100.0f * clicked_object->GetMass();
+					mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
 					break;
+				}
+			}
+
+
+			if (clicked_object != nullptr)
+			{
+				
+				
+					b2Vec2 mouse_pos(App->input->GetMouseX(), App->input->GetMouseY());
+
+
+					mouse_joint->SetTarget(PIXEL_TO_METERS(mouse_pos));
+					b2Vec2 target_pos = mouse_joint->GetTarget();
+
+					App->renderer->DrawLine(mouse_pos.x, mouse_pos.y, target_pos.x, target_pos.y, 255, 1, 1);
+				
+
+				if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN) {
+					world->DestroyJoint(mouse_joint);
+					mouse_joint = nullptr;
+					clicked_object = nullptr;
 				}
 			}
 		}	

@@ -29,6 +29,7 @@ public:
 	
 	SDL_Texture* background;
 	SDL_Texture* ball;
+	SDL_Texture* lapid4;
 
 	uint bonus_fx;
 	p2Point<int> ray;
