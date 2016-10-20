@@ -35,24 +35,6 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	// big static circle as "ground" in the middle of the screen
-	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
-	int diameter = SCREEN_WIDTH / 2;
-
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* big_ball = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	big_ball->CreateFixture(&fixture);
-
 	return true;
 }
 
@@ -75,10 +57,21 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, SDL_Texture* text)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	switch (type)
+	{
+	case 0:
+		body.type = b2_staticBody;
+		break;
+	case 1:
+		body.type = b2_dynamicBody;
+		break;
+	default:
+		body.type = b2_kinematicBody;
+		break;
+	}
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -96,13 +89,26 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
 
+	pbody->texture = text;
+
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	switch (type)
+	{
+	case 0:
+		body.type = b2_staticBody;
+		break;
+	case 1:
+		body.type = b2_dynamicBody;
+		break;
+	default:
+		body.type = b2_kinematicBody;
+		break;
+	}
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -121,6 +127,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 
+	pbody->texture = text;
 	return pbody;
 }
 
@@ -151,10 +158,22 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	switch (type)
+	{
+	case 0:
+		body.type = b2_staticBody;
+		break;
+	case 1:
+		body.type = b2_dynamicBody;
+		break;
+	default:
+		body.type = b2_kinematicBody;
+		break;
+	}
+	
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -283,39 +302,7 @@ update_status ModulePhysics::PostUpdate()
 		}	
 	}
 
-	b2MouseJointDef def;
-	b2Vec2 mouse_pos(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
 	
-	// If a body was selected we will attach a mouse joint to it
-	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
-	// using mouse_joint class property
-	if (clicked_object != nullptr)
-	{
-		def.bodyA = ground;
-		def.bodyB = clicked_object;
-		def.target = mouse_pos;
-		def.dampingRatio = 0.5f;
-		def.frequencyHz = 2.0f;
-		def.maxForce = 100.0f * clicked_object->GetMass();
-
-		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
-	}
-
-
-	// TODO 3: If the player keeps pressing the mouse button, update
-	// target position and draw a red line between both anchor points
-	if (clicked_object != nullptr)
-	{
-		mouse_pos.x = PIXEL_TO_METERS(App->input->GetMouseX());
-		mouse_pos.y = PIXEL_TO_METERS(App->input->GetMouseY());
-		
-		mouse_joint->SetTarget(mouse_pos);
-		
-		b2Vec2 object_pos = clicked_object->GetPosition();
-		App->renderer->DrawLine(object_pos.x, object_pos.y, mouse_pos.x, mouse_pos.y, 100, 100, 100);
-	}
-	// TODO 4: If the player releases the mouse button, destroy the joint
 
 	return UPDATE_CONTINUE;
 }

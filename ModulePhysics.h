@@ -28,6 +28,7 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
+	SDL_Texture* texture = nullptr;
 };
 
 // Module --------------------------------------
@@ -42,10 +43,11 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
+	PhysBody* CreateCircle(int x, int y, int radius, int type, SDL_Texture* text = nullptr);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text = nullptr);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text = nullptr);
+
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

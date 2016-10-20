@@ -9,7 +9,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
+	background = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -25,12 +25,188 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
+	
+	background = App->textures->Load("pinball/pinball_back.png");
+	ball = App->textures->Load("pinball/ball.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
+
+	// Pivot 0, 0
+	int pinball_exterior[184] = {
+		162, 33,
+		191, 36,
+		233, 47,
+		276, 70,
+		293, 91,
+		301, 99,
+		312, 119,
+		315, 145,
+		310, 170,
+		297, 195,
+		277, 213,
+		249, 226,
+		220, 233,
+		235, 254,
+		246, 267,
+		231, 283,
+		228, 296,
+		236, 300,
+		255, 282,
+		273, 277,
+		291, 276,
+		303, 282,
+		312, 293,
+		315, 306,
+		315, 848,
+		296, 850,
+		296, 306,
+		287, 301,
+		265, 315,
+		265, 464,
+		276, 474,
+		282, 483,
+		283, 521,
+		277, 543,
+		265, 557,
+		242, 583,
+		257, 597,
+		269, 615,
+		278, 636,
+		284, 660,
+		282, 715,
+		277, 725,
+		258, 735,
+		258, 748,
+		276, 764,
+		276, 797,
+		272, 812,
+		258, 824,
+		230, 838,
+		230, 847,
+		230, 884,
+		58, 883,
+		55, 839,
+		38, 828,
+		20, 813,
+		12, 795,
+		11, 771,
+		23, 753,
+		36, 748,
+		36, 728,
+		22, 714,
+		22, 655,
+		8, 643,
+		4, 629,
+		20, 612,
+		25, 604,
+		35, 592,
+		52, 566,
+		25, 535,
+		12, 504,
+		11, 448,
+		4, 434,
+		1, 355,
+		11, 348,
+		59, 313,
+		64, 302,
+		44, 281,
+		26, 252,
+		24, 218,
+		24, 195,
+		35, 177,
+		48, 160,
+		47, 148,
+		10, 143,
+		13, 112,
+		24, 87,
+		42, 72,
+		64, 57,
+		82, 48,
+		102, 42,
+		130, 35,
+		159, 33
+	};
+
+	int flip_1[18] = { 63, 193,
+		75, 220,
+		97, 232,
+		101, 239,
+		91, 248,
+		72, 239,
+		54, 221,
+		51, 199,
+		57, 191 };
+
+	int flip_2[28] = { 44, 446,
+		47, 449,
+		49, 495,
+		66, 513,
+		81, 519,
+		84, 524,
+		81, 530,
+		74, 536,
+		62, 530,
+		46, 516,
+		35, 504,
+		33, 482,
+		33, 448,
+		38, 445 };
+
+	int flip_3[20] = { 215, 538,
+		245, 521,
+		257, 491,
+		254, 480,
+		242, 483,
+		242, 492,
+		237, 501,
+		225, 515,
+		208, 518,
+		206, 526 };
+
+	int flip_4[24] = { 49, 769,
+		56, 786,
+		71, 798,
+		83, 804,
+		90, 811,
+		84, 821,
+		69, 820,
+		50, 809,
+		40, 797,
+		33, 780,
+		33, 768,
+		44, 763 };
+
+	int flip_5[24] = { 229, 816,
+		248, 798,
+		256, 774,
+		252, 764,
+		243, 765,
+		239, 768,
+		238, 774,
+		230, 789,
+		217, 799,
+		203, 805,
+		203, 818,
+		217, 820 };
+
+
+	chains.add(App->physics->CreateChain(0, 0, pinball_exterior, 184, 0));
+	chains.add(App->physics->CreateChain(0, 0, flip_1, 18, 0));
+	chains.add(App->physics->CreateChain(0, 0, flip_2, 28, 0));
+	chains.add(App->physics->CreateChain(0, 0, flip_3, 20, 0));
+	chains.add(App->physics->CreateChain(0, 0, flip_4, 24, 0));
+	chains.add(App->physics->CreateChain(0, 0, flip_5, 24, 0));
+
+	circles.add(App->physics->CreateCircle(305, 780, 6, 1, ball));
+
+	//ADD GRAVES
+
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0));
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0));
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0));
+
+
 
 	return ret;
 }
@@ -46,124 +222,19 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+
+	SDL_Rect backgr_rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+	SDL_Rect ball_rect = { 0, 0, 27, 28 };
+	App->renderer->Blit(background, 0, 0, &backgr_rect);
+	App->renderer->Blit(circles.getFirst()->data->texture, 0, 0, &ball_rect);
+
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
+		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -120), true);
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
-		circles.getLast()->data->listener = this;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-	}
-
-	// Prepare for raycast ------------------------------------------------------
-	
-	iPoint mouse;
-	mouse.x = App->input->GetMouseX();
-	mouse.y = App->input->GetMouseY();
-	int ray_hit = ray.DistanceTo(mouse);
-
-	fVector normal(0.0f, 0.0f);
-
-	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	c = boxes.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if(ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if(hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	// ray -----------------
-	if(ray_on == true)
-	{
-		fVector destination(mouse.x-ray.x, mouse.y-ray.y);
-		destination.Normalize();
-		destination *= ray_hit;
-
-		App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
-
-		if(normal.x != 0.0f)
-			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
-	}
+	//sensor->listener->OnCollision(circles.getFirst()->data, );
 
 	return UPDATE_CONTINUE;
 }
