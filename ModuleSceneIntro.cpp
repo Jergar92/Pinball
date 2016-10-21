@@ -28,6 +28,9 @@ bool ModuleSceneIntro::Start()
 	
 	background = App->textures->Load("pinball/pinball_back.png");
 	ball = App->textures->Load("pinball/ball.png");
+	left_flip= App->textures->Load("pinball/Sprites/FlipLeft.png");
+	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
+
 	lapid4= App->textures->Load("pinball/Sprites/Lapid_4_Ok.png");
 	lapid3 = App->textures->Load("pinball/Sprites/Lapid_3_Ok.png");
 	lapid2 = App->textures->Load("pinball/Sprites/Lapid_2_Ok.png");
@@ -157,7 +160,7 @@ bool ModuleSceneIntro::Start()
 		33, 448,
 		38, 445 };
 
-	int flip_3[20] = { 215, 538,
+	int flip_3[20] = { 216, 538,
 		245, 521,
 		257, 491,
 		254, 480,
@@ -165,8 +168,8 @@ bool ModuleSceneIntro::Start()
 		242, 492,
 		237, 501,
 		225, 515,
-		208, 518,
-		206, 526 };
+		211, 520,
+		215, 526 };
 
 	int flip_4[24] = { 49, 769,
 		56, 786,
@@ -207,18 +210,22 @@ bool ModuleSceneIntro::Start()
 
 	//ADD FLIPPERS
 
-		//BOTTOM_LEFT
-	circles.add(App->physics->CreateCircle(85, 816, 6, 0));
-	boxes.add(App->physics->CreateRectangle(85+30, 816, 60, 12, 1));
-	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, -60, 30);
-	
-	circles.add(App->physics->CreateCircle(85+60, 816, 6, 1));
-
+		//MID LEFT
+	circles.add(App->physics->CreateCircle(85, 530, 6, 0));
+	boxes.add(App->physics->CreateRectangle(85+25, 530, 50, 12, 1, left_flip));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
+	circles.add(App->physics->CreateCircle(85+25, 550, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
+	mid_left_flip = circles.getLast()->data;
 
-
-	bottom_left_flip = circles.getLast()->data;
-
+		//MID RIGHT
+	circles.add(App->physics->CreateCircle(209, 529, 6, 0));
+	boxes.add(App->physics->CreateRectangle(209 - 25, 529, 50, 12, 1, right_flip));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
+	circles.add(App->physics->CreateCircle(209 -25, 529, 6, 1));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
+	mid_right_flip = circles.getLast()->data;
+	
 
 	//ADD GRAVES
 
@@ -249,19 +256,28 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-
-	SDL_Rect backgr_rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-	
-	App->renderer->Blit(background, 0, 0, &backgr_rect);
+		
+	App->renderer->Blit(background, 0, 0);
 
 
 	for(p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it=it->next)
 	{ 
-		//Blit Physic Bodies
+		//Blit Circles
 		b2Vec2 pos = it->data->body->GetPosition();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x- it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
 	}
 
+	
+	p2List_item<PhysBody*>* it = boxes.getFirst();
+		//Blit 6 Flippers
+		b2Vec2 pos = it->data->body->GetPosition();
+		float angle = RADTODEG*it->data->body->GetAngle();
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-7), METERS_TO_PIXELS(pos.y - it->data->height-9), NULL, NULL, angle);
+	
+		it = it->next;
+		pos = it->data->body->GetPosition();
+		angle = RADTODEG*it->data->body->GetAngle();
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-5), METERS_TO_PIXELS(pos.y - it->data->height-10), NULL, NULL, angle);
 
 
 
@@ -273,7 +289,15 @@ update_status ModuleSceneIntro::Update()
 
 
 
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	{
+		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -250), true);
+	}
 
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	{
+		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -250), true);
+	}
 	//sensor->listener->OnCollision(circles.getFirst()->data, );
 
 	return UPDATE_CONTINUE;

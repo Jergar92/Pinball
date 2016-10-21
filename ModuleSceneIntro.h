@@ -29,13 +29,17 @@ public:
 	
 	SDL_Texture* background;
 	SDL_Texture* ball;
+	SDL_Texture* left_flip;
+	SDL_Texture* right_flip;
 	SDL_Texture* lapid4;
 	SDL_Texture* lapid3;
 	SDL_Texture* lapid2;
 	SDL_Texture* lapid1;
 
-	PhysBody* bottom_left_flip;
+	p2List_item<PhysBody*>* flips_start;
 
+	PhysBody* mid_left_flip;
+	PhysBody* mid_right_flip;
 
 	uint bonus_fx;
 	p2Point<int> ray;
