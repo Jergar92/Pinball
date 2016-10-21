@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "p2Point.h"
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
@@ -47,7 +48,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text = nullptr);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text = nullptr);
-	void CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, fPoint Local_Anchor_A, fPoint Local_Anchor_B, int lower_angle=0, int upper_angle=0);
+	b2RevoluteJoint* CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, int reference_angle=0, int upper_angle=0, int lower_angle=0);
 
 
 	// b2ContactListener ---

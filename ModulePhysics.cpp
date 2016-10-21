@@ -423,7 +423,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 }
 
 
-void ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, fPoint Local_Anchor_A, fPoint Local_Anchor_B, int lower_angle, int upper_angle)
+b2RevoluteJoint* ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, int reference_angle, int upper_angle, int lower_angle)
 {
 	b2RevoluteJointDef revoluteJointDef;
 	revoluteJointDef.bodyA = bodyA;
@@ -431,5 +431,18 @@ void ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, fPoint L
 	revoluteJointDef.collideConnected = false;
 	revoluteJointDef.localAnchorA.Set(Local_Anchor_A.x, Local_Anchor_A.y);
 	revoluteJointDef.localAnchorB.Set(Local_Anchor_B.x, Local_Anchor_B.y);
+	revoluteJointDef.referenceAngle = reference_angle;
 
+	if (upper_angle != 0 && lower_angle != 0)
+	{
+
+		revoluteJointDef.enableLimit = true;
+		revoluteJointDef.lowerAngle = lower_angle;
+		revoluteJointDef.upperAngle = upper_angle;
+
+
+	}
+
+	 b2RevoluteJoint* rev_joint = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
+	 return rev_joint;
 }
