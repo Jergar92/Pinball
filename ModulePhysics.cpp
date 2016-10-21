@@ -439,8 +439,8 @@ b2RevoluteJoint* ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bod
 	{
 
 		revoluteJointDef.enableLimit = true;
-		revoluteJointDef.lowerAngle = lower_angle;
-		revoluteJointDef.upperAngle = upper_angle;
+		revoluteJointDef.lowerAngle = lower_angle*DEGTORAD;
+		revoluteJointDef.upperAngle = upper_angle*DEGTORAD;
 
 
 	}

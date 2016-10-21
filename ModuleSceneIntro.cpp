@@ -202,7 +202,23 @@ bool ModuleSceneIntro::Start()
 	chains.add(App->physics->CreateChain(0, 0, flip_4, 24, 0));
 	chains.add(App->physics->CreateChain(0, 0, flip_5, 24, 0));
 
+	//ADD BALL
 	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0,ball));
+
+	//ADD FLIPPERS
+
+		//BOTTOM_LEFT
+	circles.add(App->physics->CreateCircle(85, 816, 6, 0));
+	boxes.add(App->physics->CreateRectangle(85+30, 816, 60, 12, 1));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, -60, 30);
+	
+	circles.add(App->physics->CreateCircle(85+60, 816, 6, 1));
+
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
+
+
+	bottom_left_flip = circles.getLast()->data;
+
 
 	//ADD GRAVES
 
@@ -238,17 +254,25 @@ update_status ModuleSceneIntro::Update()
 	
 	App->renderer->Blit(background, 0, 0, &backgr_rect);
 
+
 	for(p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it=it->next)
 	{ 
-		//TODO
+		//Blit Physic Bodies
 		b2Vec2 pos = it->data->body->GetPosition();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x- it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
 	}
 
+
+
+
+	//TO DELETE
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
+
+
+
 
 	//sensor->listener->OnCollision(circles.getFirst()->data, );
 

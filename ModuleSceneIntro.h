@@ -34,6 +34,9 @@ public:
 	SDL_Texture* lapid2;
 	SDL_Texture* lapid1;
 
+	PhysBody* bottom_left_flip;
+
+
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
