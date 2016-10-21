@@ -421,3 +421,15 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 }
+
+
+void ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, fPoint Local_Anchor_A, fPoint Local_Anchor_B, int lower_angle, int upper_angle)
+{
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = bodyA;
+	revoluteJointDef.bodyB = bodyB;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.localAnchorA.Set(Local_Anchor_A.x, Local_Anchor_A.y);
+	revoluteJointDef.localAnchorB.Set(Local_Anchor_B.x, Local_Anchor_B.y);
+
+}
