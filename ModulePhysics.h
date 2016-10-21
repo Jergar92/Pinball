@@ -48,7 +48,9 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text = nullptr);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text = nullptr);
+
 	b2RevoluteJoint* CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, int reference_angle=0, int upper_angle=0, int lower_angle=0);
+
 
 
 	// b2ContactListener ---

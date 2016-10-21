@@ -28,7 +28,11 @@ bool ModuleSceneIntro::Start()
 	
 	background = App->textures->Load("pinball/pinball_back.png");
 	ball = App->textures->Load("pinball/ball.png");
-	lapid4= App->textures->Load("pinball/sprites/Lapid_4_Ok.png");
+	lapid4= App->textures->Load("pinball/Sprites/Lapid_4_Ok.png");
+	lapid3 = App->textures->Load("pinball/Sprites/Lapid_3_Ok.png");
+	lapid2 = App->textures->Load("pinball/Sprites/Lapid_2_Ok.png");
+	lapid1 = App->textures->Load("pinball/Sprites/Lapid_1_Ok.png");
+
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
 
@@ -202,18 +206,18 @@ bool ModuleSceneIntro::Start()
 
 	//ADD GRAVES
 
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1));
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1));
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1));
-	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1));
-	circles.add(App->physics->CreateCircle(260, 390, 17, 0, 1));
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1,lapid4));
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, lapid4));
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, lapid3));
+	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, lapid2));
+	circles.add(App->physics->CreateCircle(260, 390, 17, 0, 1, lapid2));
 
-	circles.add(App->physics->CreateCircle(27, 630, 17, 0, 1));
-	circles.add(App->physics->CreateCircle(98, 640, 17, 0, 1));
-	circles.add(App->physics->CreateCircle(240, 607, 17, 0, 1));
-	circles.add(App->physics->CreateCircle(45, 684, 17, 0, 1));
-	circles.add(App->physics->CreateCircle(207, 653, 17, 0, 1));
-	circles.add(App->physics->CreateCircle(258, 680, 17, 0, 1));
+	circles.add(App->physics->CreateCircle(27, 630, 17, 0, 1, lapid4));
+	circles.add(App->physics->CreateCircle(98, 640, 17, 0, 1, lapid4));
+	circles.add(App->physics->CreateCircle(240, 607, 17, 0, 1, lapid3));
+	circles.add(App->physics->CreateCircle(45, 684, 17, 0, 1, lapid2));
+	circles.add(App->physics->CreateCircle(207, 653, 17, 0, 1, lapid2));
+	circles.add(App->physics->CreateCircle(258, 680, 17, 0, 1, lapid1));
 
 	return ret;
 }
@@ -237,9 +241,8 @@ update_status ModuleSceneIntro::Update()
 	for(p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it=it->next)
 	{ 
 		//TODO
-		/*b2Vec2 pos = it->data->body->GetPosition();
-		SDL_Rect rect = it->data->texture;
-	    App->renderer->Blit(circles.getFirst()->data->texture, METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), &ball_rect);*/
+		b2Vec2 pos = it->data->body->GetPosition();
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x- it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
