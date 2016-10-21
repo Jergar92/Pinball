@@ -422,6 +422,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		physB->listener->OnCollision(physB, physA);
 }
 
+/*
 
 void ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, fPoint Local_Anchor_A, fPoint Local_Anchor_B, int lower_angle, int upper_angle)
 {
@@ -433,3 +434,4 @@ void ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, fPoint L
 	revoluteJointDef.localAnchorB.Set(Local_Anchor_B.x, Local_Anchor_B.y);
 
 }
+*/
