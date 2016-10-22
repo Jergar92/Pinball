@@ -43,12 +43,11 @@ public:
 
 	
 	SDL_Texture* background;
+
 	SDL_Texture* ball;
 	SDL_Texture* left_flip;
 	SDL_Texture* right_flip;
 
-
-	p2List_item<PhysBody*>* flips_start;
 
 	PhysBody* mid_left_flip;
 	PhysBody* mid_right_flip;

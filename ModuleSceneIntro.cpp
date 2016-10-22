@@ -28,9 +28,6 @@ bool ModuleSceneIntro::Start()
 
 	
 	background = App->textures->Load("pinball/pinball_back.png");
-	ball = App->textures->Load("pinball/ball.png");
-	left_flip= App->textures->Load("pinball/Sprites/FlipLeft.png");
-	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 
 	//ADD BALL
 	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0, ball));
@@ -208,7 +205,6 @@ bool ModuleSceneIntro::Start()
 	chains.add(App->physics->CreateChain(0, 0, flip_3, 20, 0));
 	chains.add(App->physics->CreateChain(0, 0, flip_4, 24, 0));
 	chains.add(App->physics->CreateChain(0, 0, flip_5, 24, 0));
-
 	
 
 	//ADD FLIPPERS
@@ -230,6 +226,7 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircle(209 -25, 529, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
 	mid_right_flip = circles.getLast()->data;
+
 	
 
 	//ADD GRAVES
@@ -301,6 +298,7 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
 		}
 	}
+
 	
 	
 	
@@ -310,15 +308,11 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->body->GetPosition();
 		float angle = RADTODEG*it->data->body->GetAngle();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-7), METERS_TO_PIXELS(pos.y - it->data->height-9), NULL, NULL, angle);
-	
-		it = it->next;
-		pos = it->data->body->GetPosition();
-		angle = RADTODEG*it->data->body->GetAngle();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-5), METERS_TO_PIXELS(pos.y - it->data->height-10), NULL, NULL, angle);
 
 
 
 	//TO DELETE
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -60), true);
@@ -348,8 +342,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	int x, y;
 
 	App->audio->PlayFx(bonus_fx);
-	if(bodyA->myBodyType==LAPID|| bodyB->myBodyType == LAPID)
-	LOG("lapidaaaaa");
+	if (bodyA->myBodyType == LAPID || bodyB->myBodyType == LAPID)
+		LOG("lapidaaaaa");
+
 
 	if (bodyA->myBodyType == FLIP || bodyB->myBodyType == FLIP)
 		LOG("Flip");
