@@ -212,7 +212,8 @@ bool ModuleSceneIntro::Start()
 
 		//MID LEFT
 	circles.add(App->physics->CreateCircle(85, 530, 6, 0));
-	boxes.add(App->physics->CreateRectangle(85+25, 530, 50, 12, 1, left_flip));
+	boxes.add(App->physics->CreateRectangle(85+25, 530, 50, 12, 1, left_flip, FLIP));
+	boxes.getLast()->data->listener = this;
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(85+25, 550, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
@@ -220,7 +221,8 @@ bool ModuleSceneIntro::Start()
 
 		//MID RIGHT
 	circles.add(App->physics->CreateCircle(209, 529, 6, 0));
-	boxes.add(App->physics->CreateRectangle(209 - 25, 529, 50, 12, 1, right_flip));
+	boxes.add(App->physics->CreateRectangle(209 - 25, 529, 50, 12, 1, right_flip, FLIP));
+	boxes.getLast()->data->listener = this;
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(209 -25, 529, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
@@ -229,18 +231,39 @@ bool ModuleSceneIntro::Start()
 
 	//ADD GRAVES
 
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1,lapid4));
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, lapid4));
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, lapid3));
-	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, lapid2));
-	circles.add(App->physics->CreateCircle(260, 390, 17, 0, 1, lapid2));
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1,lapid4,LAPID));
+	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(27, 630, 17, 0, 1, lapid4));
-	circles.add(App->physics->CreateCircle(98, 640, 17, 0, 1, lapid4));
-	circles.add(App->physics->CreateCircle(240, 607, 17, 0, 1, lapid3));
-	circles.add(App->physics->CreateCircle(45, 684, 17, 0, 1, lapid2));
-	circles.add(App->physics->CreateCircle(207, 653, 17, 0, 1, lapid2));
-	circles.add(App->physics->CreateCircle(258, 680, 17, 0, 1, lapid1));
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, lapid4, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, lapid3, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, lapid2, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(260, 390, 17, 0, 1, lapid2, LAPID));
+	circles.getLast()->data->listener = this;
+
+
+	circles.add(App->physics->CreateCircle(27, 630, 17, 0, 1, lapid4, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(98, 640, 17, 0, 1, lapid4, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(240, 607, 17, 0, 1, lapid3, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(45, 684, 17, 0, 1, lapid2, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(207, 653, 17, 0, 1, lapid2, LAPID));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(258, 680, 17, 0, 1, lapid1, LAPID));
+	circles.getLast()->data->listener = this;
 
 	return ret;
 }
@@ -316,7 +339,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	int x, y;
 
 	App->audio->PlayFx(bonus_fx);
+	if(bodyA->myBodyType==LAPID|| bodyB->myBodyType == LAPID)
+	LOG("lapidaaaaa");
 
+	if (bodyA->myBodyType == FLIP || bodyB->myBodyType == FLIP)
+		LOG("Flip");
 	/*
 	if(bodyA)
 	{

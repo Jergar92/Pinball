@@ -7,11 +7,14 @@
 class PhysBody;
 class ModuleSceneIntro;
 struct Lapid {
+	uint life;
 
 	Lapid(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
-	uint life;
 	p2DynArray <SDL_Texture*>* textures;
 	PhysBody* lapidBody;
+	~Lapid() {
+
+	}
 };
 class ModuleSceneIntro : public Module
 {
