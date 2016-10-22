@@ -35,7 +35,7 @@ bool ModuleSceneIntro::Start()
 	lapid3 = App->textures->Load("pinball/Sprites/Lapid_3_Ok.png");
 	lapid2 = App->textures->Load("pinball/Sprites/Lapid_2_Ok.png");
 	lapid1 = App->textures->Load("pinball/Sprites/Lapid_1_Ok.png");
-
+	Lapid *myLapid1 = new Lapid(this, 10,"1", App->physics->CreateCircle(83, 355, 15, 0, 1));
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
 
@@ -256,18 +256,26 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-		
+
 	App->renderer->Blit(background, 0, 0);
 
 
-	for(p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it=it->next)
-	{ 
+	for (p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it = it->next)
+	{
 		//Blit Circles
 		b2Vec2 pos = it->data->body->GetPosition();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x- it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
 	}
+	/*fail on blit
+	for (p2List_item<Lapid*>* it = lapids.getFirst(); it != nullptr; it = it->next){
+		b2Vec2 pos = it->data->lapidBody->body->GetPosition();
+		
+		if (it->data->life > 6) {
+			App->renderer->Blit((it->data->textures[1]), METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
 
-	
+		}
+	}
+	*/
 	p2List_item<PhysBody*>* it = boxes.getFirst();
 		//Blit 6 Flippers
 		b2Vec2 pos = it->data->body->GetPosition();
@@ -321,4 +329,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		bodyB->GetPosition(x, y);
 		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
 	}*/
+}
+
+Lapid::Lapid(ModuleSceneIntro* scene ,uint life, const char* lapidnumber, PhysBody* lapidBody):life(life), lapidBody(lapidBody)
+{
+	textures = new p2DynArray<SDL_Texture*>(4);
+	uint i = 0;
+	textures->PushBack(scene->App->textures->Load(("pinball/Sprites/Lapid_%c_Ok.png", lapidnumber)));
+	textures->PushBack(scene->App->textures->Load(("pinball/Sprites/Lapid_%c_Des.png", lapidnumber)));
+
+
 }

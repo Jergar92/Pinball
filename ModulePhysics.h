@@ -45,6 +45,7 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius, int type, int restitution = 0, SDL_Texture* text = nullptr);
+	PhysBody* CreateCircleSensor(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text = nullptr);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text = nullptr);

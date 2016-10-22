@@ -3,9 +3,16 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
-
+#include "p2DynArray.h"
 class PhysBody;
+class ModuleSceneIntro;
+struct Lapid {
 
+	Lapid(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
+	uint life;
+	p2DynArray <SDL_Texture*>* textures;
+	PhysBody* lapidBody;
+};
 class ModuleSceneIntro : public Module
 {
 public:
@@ -40,7 +47,7 @@ public:
 
 	PhysBody* mid_left_flip;
 	PhysBody* mid_right_flip;
-
+	p2List<Lapid*> lapids;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
