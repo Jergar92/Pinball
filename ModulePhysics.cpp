@@ -481,4 +481,12 @@ b2RevoluteJoint* ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bod
 
 }
 
+bool ModulePhysics::DestroyBody(PhysBody * to_delete)
+{
+
+	world->DestroyBody(to_delete->body);
+	to_delete->body = nullptr;
+	return true;
+}
+
 

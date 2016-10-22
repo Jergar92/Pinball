@@ -26,6 +26,7 @@ public:
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 
 public:
+	int life = 0;
 	int width, height;
 	b2Body* body;
 	Module* listener;
@@ -54,6 +55,7 @@ public:
 
 	b2RevoluteJoint* CreateRevolutionJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, int reference_angle=0, int upper_angle=0, int lower_angle=0);
 
+	bool DestroyBody(PhysBody* to_delete);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

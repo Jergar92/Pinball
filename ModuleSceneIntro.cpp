@@ -35,10 +35,54 @@ bool ModuleSceneIntro::Start()
 	//ADD BALL
 	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0, ball));
 
-
+	//ADD GRAVES
 	circles.add(App->physics->CreateCircle(83, 355, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "3", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(202, 408, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(240, 390, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	//////
+	circles.add(App->physics->CreateCircle(27, 610, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(98, 640, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "3", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(240, 607, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+	
+	circles.add(App->physics->CreateCircle(45, 684, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(207, 653, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+
+	circles.add(App->physics->CreateCircle(258, 680, 15, 0, NULL, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "1", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
+
+
 
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
@@ -232,42 +276,7 @@ bool ModuleSceneIntro::Start()
 	mid_right_flip = circles.getLast()->data;
 	
 
-	//ADD GRAVES
-
-/*	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1,lapid4,LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, lapid4, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, lapid3, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, lapid2, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(260, 390, 17, 0, 1, lapid2, LAPID));
-	circles.getLast()->data->listener = this;
-
-
-	circles.add(App->physics->CreateCircle(27, 630, 17, 0, 1, lapid4, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(98, 640, 17, 0, 1, lapid4, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(240, 607, 17, 0, 1, lapid3, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(45, 684, 17, 0, 1, lapid2, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(207, 653, 17, 0, 1, lapid2, LAPID));
-	circles.getLast()->data->listener = this;
-
-	circles.add(App->physics->CreateCircle(258, 680, 17, 0, 1, lapid1, LAPID));
-	circles.getLast()->data->listener = this;*/
-
+	
 	return ret;
 }
 
@@ -288,6 +297,10 @@ update_status ModuleSceneIntro::Update()
 
 	for (p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it = it->next)
 	{
+
+		if (it->data->body == nullptr)
+			continue;
+
 		//Blit Circles
 		b2Vec2 pos = it->data->body->GetPosition();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
@@ -295,10 +308,22 @@ update_status ModuleSceneIntro::Update()
 
 	
 	for (p2List_item<Lapid*>* it = lapids.getFirst(); it != nullptr; it = it->next){
+		
+		if (it->data->lapidBody->body == nullptr)
+			continue;
+		
 		b2Vec2 pos = it->data->lapidBody->body->GetPosition();
 		
-		if (it->data->life > 6) {
+		if (it->data->lapidBody->life > 6) {
 			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
+		}
+		else if (it->data->lapidBody->life > 0)
+		{
+			App->renderer->Blit(it->data->texture[1], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
+		}
+		else if (it->data->lapidBody->life == 0)
+		{
+			App->physics->DestroyBody(it->data->lapidBody);
 		}
 	}
 	
@@ -348,18 +373,26 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	int x, y;
 
 	App->audio->PlayFx(bonus_fx);
-	if(bodyA->myBodyType==LAPID|| bodyB->myBodyType == LAPID)
-	LOG("lapidaaaaa");
+	if (bodyA->myBodyType == LAPID && bodyA->life!=0)
+	{
+		bodyA->life--;
+	}
 
-	if (bodyA->myBodyType == FLIP || bodyB->myBodyType == FLIP)
-		LOG("Flip");
+	if (bodyB->myBodyType == LAPID && bodyB->life != 0)
+	{
+		bodyB->life--;
+	}
+
+	
 
 }
 
-Lapid::Lapid(ModuleSceneIntro* scene ,uint life, const char* lapidnumber, PhysBody* lapidBody):life(life), lapidBody(lapidBody)
+Lapid::Lapid(ModuleSceneIntro* scene ,uint life, const char* lapidnumber, PhysBody* lapidBody): lapidBody(lapidBody)
 {
 	
 	uint i = 0;
+
+	lapidBody->life = life;
 
 	p2SString tmp1("pinball/Sprites/Lapid_%s_Ok.png", lapidnumber);
 	p2SString tmp2("pinball/Sprites/Lapid_%s_Des.png", lapidnumber);

@@ -11,8 +11,6 @@ class ModuleSceneIntro;
 
 struct Lapid {
 
-	uint life;
-
 	Lapid(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
 
 	SDL_Texture* texture[2];
