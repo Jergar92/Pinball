@@ -9,15 +9,22 @@
 class PhysBody;
 class ModuleSceneIntro;
 
-struct Lapid {
+struct HeadStone {
 
-	Lapid(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
+	HeadStone(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
 
 	SDL_Texture* texture[2];
 	PhysBody* lapidBody;
-	~Lapid(){}
+	~HeadStone(){}
 };
+struct Bonus {
 
+	Bonus(ModuleSceneIntro* scene, const char* bonusnumber, PhysBody* lapidBody);
+
+	SDL_Texture* texture;
+	PhysBody* bonusBody;
+	~Bonus() {}
+};
 
 class ModuleSceneIntro : public Module
 {
@@ -34,6 +41,8 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> chains;
+
+	p2List<PhysBody*> bonus;
 
 	PhysBody* sensor;
 	bool sensed;
@@ -55,7 +64,9 @@ public:
 	PhysBody* up_left_flip;
 	PhysBody* up_right_flip;
 
-	p2List<Lapid*> lapids;
+	p2List<HeadStone*> headstone;
+
+	p2List<Bonus*> listBonus;
 
 	uint bonus_fx;
 	p2Point<int> ray;

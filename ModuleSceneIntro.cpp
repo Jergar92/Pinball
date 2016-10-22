@@ -36,54 +36,92 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircle(305, 750, 6, 1, 0, ball));
 
 	//ADD GRAVES
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "3", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "3", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//////
-	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "3", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "3", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 	
-	circles.add(App->physics->CreateCircle(45, 684, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(45, 684, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
-	circles.getLast()->data->listener = this;
-
-
-	circles.add(App->physics->CreateCircle(258, 680, 15, 0, 1, NULL, LAPID));
-	lapids.add(new Lapid(this, 10, "1", circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
+	circles.add(App->physics->CreateCircle(258, 680, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, "1", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
+	//
+	bonus.add(App->physics->CreateCircleSensor(80, 500, 5, 0, BONUS));
+	listBonus.add(new Bonus(this,"3", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(100, 500, 5, 0, BONUS));
+	listBonus.add(new Bonus(this,"3", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(90, 500, 5, 0, BONUS));
+	listBonus.add(new Bonus(this,"5", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(90, 550, 5, 0, BONUS));
+	listBonus.add(new Bonus(this,"2", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(80, 600, 5, 0, BONUS));
+	listBonus.add(new Bonus(this, "3", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(90, 600,5, 0, BONUS));
+	listBonus.add(new Bonus(this, "3", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(85, 650, 5, 0, BONUS));
+	listBonus.add(new Bonus(this, "2", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(65, 650, 5, 0, BONUS));
+	listBonus.add(new Bonus(this, "2", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(70, 700, 5, 0, BONUS));
+	listBonus.add(new Bonus(this, "4", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
+
+	bonus.add(App->physics->CreateCircleSensor(70, 750, 5, 0, BONUS));
+	listBonus.add(new Bonus(this, "3", bonus.getLast()->data));
+	bonus.getLast()->data->listener = this;
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
 
@@ -323,7 +361,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	
-	for (p2List_item<Lapid*>* it = lapids.getFirst(); it != nullptr; it = it->next){
+	for (p2List_item<HeadStone*>* it = headstone.getFirst(); it != nullptr; it = it->next){
 		
 		if (it->data->lapidBody->body == nullptr)
 			continue;
@@ -342,7 +380,19 @@ update_status ModuleSceneIntro::Update()
 			App->physics->DestroyBody(it->data->lapidBody);
 		}
 	}
-	
+	for (p2List_item<Bonus*>* it = listBonus.getFirst(); it != nullptr; it = it->next) {
+
+		if (it->data->bonusBody->body == nullptr)
+			continue;
+
+		b2Vec2 pos = it->data->bonusBody->body->GetPosition();
+
+		if (it->data->bonusBody->active == true) {
+			App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height - 5));
+		}
+		
+	}
+
 	
 	
 	//Blit 6 Flippers
@@ -377,7 +427,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		App->renderer->camera.y--;
+		//App->renderer->camera.y--;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
@@ -413,30 +463,45 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	int x, y;
 
 	App->audio->PlayFx(bonus_fx);
-	if (bodyA->myBodyType == LAPID && bodyA->life!=0)
+	if (bodyA->myBodyType == GRAVES && bodyA->life!=0)
 	{
 		bodyA->life--;
 	}
 
-	if (bodyB->myBodyType == LAPID && bodyB->life != 0)
+	if (bodyB->myBodyType == GRAVES && bodyB->life != 0)
 	{
 		bodyB->life--;
+	}
+	if (bodyA->myBodyType == BONUS)
+	{
+		bodyA->active= true;
+	}
+
+	if (bodyB->myBodyType == BONUS)
+	{
+		bodyB->active = true;
 	}
 
 	
 
 }
 
-Lapid::Lapid(ModuleSceneIntro* scene ,uint life, const char* lapidnumber, PhysBody* lapidBody): lapidBody(lapidBody)
+HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, const char* lapidnumber, PhysBody* lapidBody): lapidBody(lapidBody)
 {
 	
 	uint i = 0;
 
 	lapidBody->life = life;
 
-	p2SString tmp1("pinball/Sprites/Lapid_%s_Ok.png", lapidnumber);
-	p2SString tmp2("pinball/Sprites/Lapid_%s_Des.png", lapidnumber);
+	p2SString tmp1("pinball/Sprites/Grave_%s_Ok.png", lapidnumber);
+	p2SString tmp2("pinball/Sprites/Grave_%s_Des.png", lapidnumber);
 
 	texture[0]= scene->App->textures->Load(tmp1.GetString());
 	texture[1]= scene->App->textures->Load(tmp2.GetString());
+}
+
+Bonus::Bonus(ModuleSceneIntro * scene, const char * bonusnumber, PhysBody * lapidBody) : bonusBody(lapidBody)
+{
+	p2SString tmp1("pinball/Sprites/x%s.png", bonusnumber);
+	texture = scene->App->textures->Load(tmp1.GetString());
 }

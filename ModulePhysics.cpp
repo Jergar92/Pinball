@@ -96,7 +96,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, float 
 
 	return pbody;
 }
-PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, bodyType myType)
+PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, int type, bodyType myType)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;

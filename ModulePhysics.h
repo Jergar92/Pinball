@@ -32,6 +32,7 @@ public:
 	Module* listener;
 	SDL_Texture* texture = nullptr;
 	bodyType myBodyType;
+	bool active = false;
 
 };
 
@@ -48,7 +49,7 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius, int type, float restitution = 0, SDL_Texture* text = nullptr, bodyType myType=NONE);
-	PhysBody* CreateCircleSensor(int x, int y, int radius, bodyType myType = NONE);
+	PhysBody* CreateCircleSensor(int x, int y, int radius, int type, bodyType myType = NONE);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text = nullptr, bodyType myType = NONE);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType myType = NONE);
 	PhysBody* CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text = nullptr, bodyType myType = NONE);

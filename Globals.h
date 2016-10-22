@@ -22,7 +22,7 @@ enum update_status
 enum bodyType
 {
 	FLIP,
-	LAPID,
+	GRAVES,
 	BONUS,
 	CHAIN,
 	NONE
