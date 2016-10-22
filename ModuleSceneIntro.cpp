@@ -33,7 +33,7 @@ bool ModuleSceneIntro::Start()
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 
 	//ADD BALL
-	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0, ball));
+	circles.add(App->physics->CreateCircle(305, 750, 6, 1, 0, ball));
 
 	//ADD GRAVES
 	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, LAPID));

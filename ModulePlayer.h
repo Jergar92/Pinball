@@ -15,6 +15,9 @@ public:
 
 public:
 
+
+	PhysBody* bouncer;
+	PhysBody* bouncerWheel;
 	unsigned int score;
 
 };

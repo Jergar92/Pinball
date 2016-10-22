@@ -480,6 +480,23 @@ b2RevoluteJoint* ModulePhysics::CreateRevolutionJoint(b2Body* bodyA, b2Body* bod
 	 return rev_joint;
 
 }
+b2DistanceJointDef* ModulePhysics::CreateLineJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, float frequency, float damping)
+{
+	b2DistanceJointDef DistanceJoinDef;
+
+	DistanceJoinDef.bodyA = bodyA;
+	DistanceJoinDef.bodyB = bodyB;
+
+	DistanceJoinDef.localAnchorA.Set(Local_Anchor_A.x, Local_Anchor_A.y);
+	DistanceJoinDef.localAnchorB.Set(Local_Anchor_B.x, Local_Anchor_B.y);
+
+	DistanceJoinDef.dampingRatio = damping;
+	DistanceJoinDef.frequencyHz = frequency;
+
+	world->CreateJoint(&DistanceJoinDef);
+	b2DistanceJointDef* dis_joint = (b2DistanceJointDef*)world->CreateJoint(&DistanceJoinDef);
+	return dis_joint;
+}
 
 bool ModulePhysics::DestroyBody(PhysBody * to_delete)
 {
