@@ -15,4 +15,6 @@ public:
 
 public:
 
+	unsigned int score;
+
 };

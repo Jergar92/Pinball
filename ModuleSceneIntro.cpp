@@ -7,6 +7,7 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	background = NULL;
@@ -31,11 +32,14 @@ bool ModuleSceneIntro::Start()
 	left_flip= App->textures->Load("pinball/Sprites/FlipLeft.png");
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 
-	lapid4= App->textures->Load("pinball/Sprites/Lapid_4_Ok.png");
-	lapid3 = App->textures->Load("pinball/Sprites/Lapid_3_Ok.png");
-	lapid2 = App->textures->Load("pinball/Sprites/Lapid_2_Ok.png");
-	lapid1 = App->textures->Load("pinball/Sprites/Lapid_1_Ok.png");
-	Lapid *myLapid1 = new Lapid(this, 10,"1", App->physics->CreateCircle(83, 355, 15, 0, 1));
+	//ADD BALL
+	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0, ball));
+
+
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0, NULL, NULL, LAPID));
+	lapids.add(new Lapid(this, 10, "1", circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
 
@@ -205,8 +209,7 @@ bool ModuleSceneIntro::Start()
 	chains.add(App->physics->CreateChain(0, 0, flip_4, 24, 0));
 	chains.add(App->physics->CreateChain(0, 0, flip_5, 24, 0));
 
-	//ADD BALL
-	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0,ball));
+	
 
 	//ADD FLIPPERS
 
@@ -231,7 +234,7 @@ bool ModuleSceneIntro::Start()
 
 	//ADD GRAVES
 
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1,lapid4,LAPID));
+/*	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1,lapid4,LAPID));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, lapid4, LAPID));
@@ -263,7 +266,7 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(258, 680, 17, 0, 1, lapid1, LAPID));
-	circles.getLast()->data->listener = this;
+	circles.getLast()->data->listener = this;*/
 
 	return ret;
 }
@@ -289,18 +292,21 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->body->GetPosition();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
 	}
-	/*fail on blit
+
+	
 	for (p2List_item<Lapid*>* it = lapids.getFirst(); it != nullptr; it = it->next){
 		b2Vec2 pos = it->data->lapidBody->body->GetPosition();
 		
 		if (it->data->life > 6) {
-			App->renderer->Blit((it->data->textures[1]), METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
-
+			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
 		}
 	}
-	*/
+	
+	
+	
+	//Blit 6 Flippers
 	p2List_item<PhysBody*>* it = boxes.getFirst();
-		//Blit 6 Flippers
+
 		b2Vec2 pos = it->data->body->GetPosition();
 		float angle = RADTODEG*it->data->body->GetAngle();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-7), METERS_TO_PIXELS(pos.y - it->data->height-9), NULL, NULL, angle);
@@ -319,7 +325,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 
-
+	//APPLY FORCES TO FLIPPERS
 
 	mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 	mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
@@ -333,7 +339,6 @@ update_status ModuleSceneIntro::Update()
 	{
 		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
-	//sensor->listener->OnCollision(circles.getFirst()->data, );
 
 	return UPDATE_CONTINUE;
 }
@@ -348,26 +353,17 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA->myBodyType == FLIP || bodyB->myBodyType == FLIP)
 		LOG("Flip");
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
 
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }
 
 Lapid::Lapid(ModuleSceneIntro* scene ,uint life, const char* lapidnumber, PhysBody* lapidBody):life(life), lapidBody(lapidBody)
 {
-	textures = new p2DynArray<SDL_Texture*>(4);
+	
 	uint i = 0;
-	textures->PushBack(scene->App->textures->Load(("pinball/Sprites/Lapid_%c_Ok.png", lapidnumber)));
-	textures->PushBack(scene->App->textures->Load(("pinball/Sprites/Lapid_%c_Des.png", lapidnumber)));
 
+	p2SString tmp1("pinball/Sprites/Lapid_%s_Ok.png", lapidnumber);
+	p2SString tmp2("pinball/Sprites/Lapid_%s_Des.png", lapidnumber);
 
+	texture[0]= scene->App->textures->Load(tmp1.GetString());
+	texture[1]= scene->App->textures->Load(tmp2.GetString());
 }

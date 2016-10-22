@@ -2,20 +2,25 @@
 #include "Module.h"
 #include "p2List.h"
 #include "p2Point.h"
+#include "p2SString.h"
 #include "Globals.h"
 #include "p2DynArray.h"
+
 class PhysBody;
 class ModuleSceneIntro;
+
 struct Lapid {
+
 	uint life;
 
 	Lapid(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
-	p2DynArray <SDL_Texture*>* textures;
-	PhysBody* lapidBody;
-	~Lapid() {
 
-	}
+	SDL_Texture* texture[2];
+	PhysBody* lapidBody;
+	~Lapid(){}
 };
+
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -41,16 +46,15 @@ public:
 	SDL_Texture* ball;
 	SDL_Texture* left_flip;
 	SDL_Texture* right_flip;
-	SDL_Texture* lapid4;
-	SDL_Texture* lapid3;
-	SDL_Texture* lapid2;
-	SDL_Texture* lapid1;
+
 
 	p2List_item<PhysBody*>* flips_start;
 
 	PhysBody* mid_left_flip;
 	PhysBody* mid_right_flip;
+
 	p2List<Lapid*> lapids;
+
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
