@@ -320,14 +320,18 @@ update_status ModuleSceneIntro::Update()
 
 
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+
+	mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+	mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -250), true);
+		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -250), true);
+		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 	//sensor->listener->OnCollision(circles.getFirst()->data, );
 
