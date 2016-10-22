@@ -36,49 +36,49 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0, ball));
 
 	//ADD GRAVES
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "3", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(202, 408, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(240, 390, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//////
-	circles.add(App->physics->CreateCircle(27, 610, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(98, 640, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "3", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(240, 607, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 	
-	circles.add(App->physics->CreateCircle(45, 684, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(45, 684, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(207, 653, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
-	circles.add(App->physics->CreateCircle(258, 680, 15, 0, NULL, NULL, LAPID));
+	circles.add(App->physics->CreateCircle(258, 680, 15, 0, 1, NULL, LAPID));
 	lapids.add(new Lapid(this, 10, "1", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -275,7 +275,23 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
 	mid_right_flip = circles.getLast()->data;
 	
+	//UP LEFT
+	circles.add(App->physics->CreateCircle(100, 250, 6, 0));
+	boxes.add(App->physics->CreateRectangle(100 + 25, 250, 50, 12, 1, left_flip, FLIP));
+	boxes.getLast()->data->listener = this;
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
+	circles.add(App->physics->CreateCircle(100 + 25, 270, 6, 1));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
+	up_left_flip = circles.getLast()->data;
 
+	//UP RIGHT
+	circles.add(App->physics->CreateCircle(220, 250, 6, 0));
+	boxes.add(App->physics->CreateRectangle(220 - 25, 250, 50, 12, 1, right_flip, FLIP));
+	boxes.getLast()->data->listener = this;
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
+	circles.add(App->physics->CreateCircle(220 - 25, 270, 6, 1));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
+	up_right_flip = circles.getLast()->data;
 	
 	return ret;
 }
@@ -315,11 +331,11 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->lapidBody->body->GetPosition();
 		
 		if (it->data->lapidBody->life > 6) {
-			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
+			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height - 5));
 		}
 		else if (it->data->lapidBody->life > 0)
 		{
-			App->renderer->Blit(it->data->texture[1], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height));
+			App->renderer->Blit(it->data->texture[1], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height - 5));
 		}
 		else if (it->data->lapidBody->life == 0)
 		{
@@ -341,6 +357,16 @@ update_status ModuleSceneIntro::Update()
 		angle = RADTODEG*it->data->body->GetAngle();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-5), METERS_TO_PIXELS(pos.y - it->data->height-10), NULL, NULL, angle);
 
+		it = it->next;
+		pos = it->data->body->GetPosition();
+		angle = RADTODEG*it->data->body->GetAngle();
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
+
+		it = it->next;
+		pos = it->data->body->GetPosition();
+		angle = RADTODEG*it->data->body->GetAngle();
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
+
 
 
 	//TO DELETE
@@ -349,20 +375,34 @@ update_status ModuleSceneIntro::Update()
 		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		App->renderer->camera.y--;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		App->renderer->camera.y++;
+	}
 
 	//APPLY FORCES TO FLIPPERS
 
 	mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 	mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+	up_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+	up_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+		up_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+		up_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+
 	}
 
 	return UPDATE_CONTINUE;

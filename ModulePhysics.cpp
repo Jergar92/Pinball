@@ -57,7 +57,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, int restitution, SDL_Texture* text, bodyType myType)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, float restitution, SDL_Texture* text, bodyType myType)
 {
 	b2BodyDef body;
 	switch (type)

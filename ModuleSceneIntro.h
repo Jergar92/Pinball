@@ -48,8 +48,12 @@ public:
 
 	p2List_item<PhysBody*>* flips_start;
 
+	PhysBody* low_left_flip;
+	PhysBody* low_right_flip;
 	PhysBody* mid_left_flip;
 	PhysBody* mid_right_flip;
+	PhysBody* up_left_flip;
+	PhysBody* up_right_flip;
 
 	p2List<Lapid*> lapids;
 
