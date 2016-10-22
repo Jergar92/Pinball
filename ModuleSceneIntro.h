@@ -23,6 +23,9 @@ struct Bonus {
 
 	SDL_Texture* texture;
 	PhysBody* bonusBody;
+	uint lastTime;
+	uint currentTime;
+
 	~Bonus() {}
 };
 
@@ -46,7 +49,6 @@ public:
 
 	PhysBody* sensor;
 	bool sensed;
-
 
 	
 	SDL_Texture* background;
