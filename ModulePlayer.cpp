@@ -28,6 +28,7 @@ bool ModulePlayer::Start()
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 	//ADD BALL
 	circles.add(App->physics->CreateCircle(305, 780, 6, 1, 0, ball));
+	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, 870, SCREEN_WIDTH, 50);
 
 	//ADD FLIPPERS
 
@@ -65,8 +66,6 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
-	LOG("Update player");
-
 	for (p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it = it->next)
 	{
 		//Blit Circles
@@ -97,16 +96,17 @@ update_status ModulePlayer::Update()
 		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 
+	mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+	mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 
-
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -250), true);
+		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -250), true);
+		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 
 	return UPDATE_CONTINUE;
@@ -120,8 +120,6 @@ void ModulePlayer::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	int x, y;
 
 	App->audio->PlayFx(bonus_fx);
-	if (bodyA->myBodyType == LAPID || bodyB->myBodyType == LAPID)
-		LOG("lapidaaaaa");
 
 	if (bodyA->myBodyType == FLIP || bodyB->myBodyType == FLIP)
 		LOG("Flip");

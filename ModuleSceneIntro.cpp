@@ -278,7 +278,7 @@ update_status ModuleSceneIntro::Update()
 
 
 	//TO DELETE
-	
+
 	//sensor->listener->OnCollision(circles.getFirst()->data, );
 
 	return UPDATE_CONTINUE;
@@ -289,6 +289,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	int x, y;
 
 	App->audio->PlayFx(bonus_fx);
+	if (bodyA->myBodyType == LAPID || bodyB->myBodyType == LAPID)
+		LOG("lapidaaaaa");
 
 	/*
 	if(bodyA)
