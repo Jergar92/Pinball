@@ -26,20 +26,11 @@ public:
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 
 public:
-	int life = 0;
 	int width, height;
 	b2Body* body;
 	Module* listener;
 	SDL_Texture* texture = nullptr;
 	bodyType myBodyType;
-	//Score Values
-	uint points;
-	//Bonus Values
-	bool active = false;
-	uint lastTime = NULL;
-	uint bonusValue =NULL;
-
-
 };
 
 // Module --------------------------------------

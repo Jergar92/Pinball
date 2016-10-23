@@ -11,15 +11,19 @@ class ModuleSceneIntro;
 struct Brain {
 	Brain(ModuleSceneIntro* scene, uint points, PhysBody* lapidBody);
 	PhysBody* brainBody;
+	uint points;
+
 
 };
 struct HeadStone 
 {
 
 	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, const char* lapidnumber, PhysBody* lapidBody);
-
+	int life = 0;
 	SDL_Texture* texture[2];
 	PhysBody* stoneBody;
+	uint points;
+	uint fx;
 	~HeadStone(){}
 };
 struct Bonus {
@@ -28,7 +32,11 @@ struct Bonus {
 
 	SDL_Texture* texture;
 	PhysBody* bonusBody;
-	uint currentTime;
+	bool active = false;
+	uint fx;
+	uint currentTime = NULL;
+	uint lastTime = NULL;
+	uint bonusValue = NULL;
 	~Bonus() {}
 };
 
@@ -77,8 +85,10 @@ public:
 	//Score values
 	uint myScore;
 	uint actualBonus=1;
-	//
-	uint bonus_fx;
+	//Audios
+	uint gravesFx[4];
+	uint bonusFx;
+
 	p2Point<int> ray;
 	bool ray_on;
 };

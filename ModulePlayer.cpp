@@ -34,6 +34,8 @@ bool ModulePlayer::Start()
 // Unload assets
 bool ModulePlayer::CleanUp()
 {
+	App->textures->Unload(bounc);
+
 	LOG("Unloading player");
 
 	return true;

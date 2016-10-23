@@ -23,6 +23,15 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+	//LoadMusic
+
+	App->audio->PlayMusic("pinball/sounds/game_music.ogg", 0.0f);
+	int i = 0;
+	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave1.wav");
+	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave2.wav");
+	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave3.wav");
+	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave4.wav");
+	bonusFx= App->audio->LoadFx("pinball/sounds/ding_snd.wav");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -346,7 +355,10 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
+	App->textures->Unload(background);
+	App->textures->Unload(ball);
+	App->textures->Unload(left_flip);
+	App->textures->Unload(right_flip);
 	return true;
 }
 
@@ -375,14 +387,14 @@ update_status ModuleSceneIntro::Update()
 		
 		b2Vec2 pos = it->data->stoneBody->body->GetPosition();
 		
-		if (it->data->stoneBody->life > 6) {
+		if (it->data->life > 6) {
 			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
 		}
-		else if (it->data->stoneBody->life > 0)
+		else if (it->data->life > 0)
 		{
 			App->renderer->Blit(it->data->texture[1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
 		}
-		else if (it->data->stoneBody->life == 0)
+		else if (it->data->life == 0)
 		{
 			App->physics->DestroyBody(it->data->stoneBody);
 		}
@@ -394,7 +406,7 @@ update_status ModuleSceneIntro::Update()
 
 		b2Vec2 pos = it->data->bonusBody->body->GetPosition();
 
-		if (it->data->bonusBody->active == true) {
+		if (it->data->active == true) {
 			App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height));
 		}
 		
@@ -406,15 +418,14 @@ update_status ModuleSceneIntro::Update()
 			continue;
 
 		b2Vec2 pos = it->data->bonusBody->body->GetPosition();
-		if (it->data->bonusBody->active == true ) {
+		if (it->data->active == true ) {
 			it->data->currentTime = SDL_GetTicks();
 
-			if (it->data->bonusBody->lastTime + BONUS_TIME < it->data->currentTime)
+			if (it->data->lastTime + BONUS_TIME < it->data->currentTime)
 			{
-			
-			it->data->bonusBody->lastTime = it->data->currentTime;
-			it->data->bonusBody->active = false;
-			actualBonus-=it->data->bonusBody->bonusValue;
+			it->data->lastTime = it->data->currentTime;
+			it->data->active = false;
+			actualBonus-=it->data->bonusValue;
 			}
 		}
 
@@ -486,40 +497,31 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
-
-	App->audio->PlayFx(bonus_fx);
-	if (bodyA->myBodyType == GRAVES && bodyA->life!=0)
-	{
-		bodyA->life--;
-		myScore += ToScore(bodyA->points);
+	for (uint i = 0; i < headstone.count(); ++i) {
+		p2List_item<HeadStone*>* item = headstone.getFirst();
+		for (; item != NULL; item = item->next) {
+			if (item->data->stoneBody == bodyA) {
+				item->data->life--;
+				App->audio->PlayFx(item->data->fx);
+				myScore += ToScore(item->data->points);
+				return;
+			}
+		}
 	}
-
-	if (bodyB->myBodyType == GRAVES && bodyB->life != 0)
-	{
-		bodyB->life--;
-		myScore += ToScore(bodyB->points);
+	for (uint i = 0; i < listBonus.count(); ++i) {
+		p2List_item<Bonus*>* item = listBonus.getFirst();
+		for (; item != NULL; item = item->next) {
+			if (item->data->bonusBody == bodyA) {
+				if (item->data->active == false) {
+					App->audio->PlayFx(item->data->fx);
+					actualBonus += item->data->bonusValue;
+				}
+				item->data->active = true;
+				item->data->lastTime = SDL_GetTicks();
+				return;
+			}
+		}
 	}
-	if (bodyA->myBodyType == BONUS)
-	{
-		if (bodyA->active == false) 
-			actualBonus += bodyA->bonusValue;
-		
-		bodyA->active = true;
-		bodyA->lastTime = SDL_GetTicks();
-	}
-
-	if (bodyB->myBodyType == BONUS)
-	{
-		if (bodyB->active == false) 
-			actualBonus += bodyB->bonusValue;
-
-		bodyB->active = true;
-		bodyB->lastTime = SDL_GetTicks();
-
-	}
-
-	
-
 }
 
 uint ModuleSceneIntro::ToScore(uint score)
@@ -531,16 +533,16 @@ uint ModuleSceneIntro::ToScore(uint score)
 	return ret = actualBonus*score;
 }
 
-HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, uint points, const char* stoneNumber, PhysBody* stoneBody): stoneBody(stoneBody)
+HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, uint points, const char* stoneNumber, PhysBody* stoneBody): stoneBody(stoneBody),life(life), points(points)
 {
 	
 	uint i = 0;
 
-	stoneBody->life = life;
-	stoneBody->points = points;
+	p2SString strFx("pinball/sounds/grave%s.wav", stoneNumber);
+	fx = scene->App->audio->LoadFx(strFx.GetString());
+
 	p2SString tmp1("pinball/Sprites/Grave_%s_Ok.png", stoneNumber);
 	p2SString tmp2("pinball/Sprites/Grave_%s_Des.png", stoneNumber);
-
 	texture[0]= scene->App->textures->Load(tmp1.GetString());
 	texture[1]= scene->App->textures->Load(tmp2.GetString());
 }
@@ -548,18 +550,18 @@ HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, uint points, const char
 Bonus::Bonus(ModuleSceneIntro * scene, const char * bonusNumber, PhysBody * bonusBody) : bonusBody(bonusBody)
 {
 	
+	fx = scene->App->audio->LoadFx("pinball/sounds/ding_snd.wav");
 	p2SString tmp1("pinball/Sprites/x%s.png", bonusNumber);
 	texture = scene->App->textures->Load(tmp1.GetString());
 	currentTime = SDL_GetTicks();
-	bonusBody->lastTime = currentTime;
-	bonusBody->bonusValue = atoi(bonusNumber);
+	lastTime = currentTime;
+	bonusValue = atoi(bonusNumber);
 
 }
 
-Brain::Brain(ModuleSceneIntro * scene, uint points, PhysBody * brainBody):brainBody(brainBody)
+Brain::Brain(ModuleSceneIntro * scene, uint points, PhysBody * brainBody):brainBody(brainBody),points(points)
 {
 	brainBody->texture = scene->App->textures->Load("pinball/Sprites/brain.png");
-	brainBody->points = points;
 	brainBody->width += brainBody->width;
 
 }
