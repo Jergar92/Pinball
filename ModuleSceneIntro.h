@@ -11,7 +11,7 @@ class ModuleSceneIntro;
 
 struct HeadStone {
 
-	HeadStone(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
+	HeadStone(ModuleSceneIntro* scene, uint life,uint ac, const char* lapidnumber, PhysBody* lapidBody);
 
 	SDL_Texture* texture[2];
 	PhysBody* stoneBody;
@@ -67,9 +67,11 @@ public:
 	p2List<HeadStone*> headstone;
 
 	p2List<Bonus*> listBonus;
+	//Score functions
+	uint ToScore(uint score);
 	//Score values
-	uint score;
-	uint actualBonus;
+	uint myScore;
+	uint actualBonus=1;
 	//
 	uint bonus_fx;
 	p2Point<int> ray;

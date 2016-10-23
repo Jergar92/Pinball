@@ -32,6 +32,8 @@ public:
 	Module* listener;
 	SDL_Texture* texture = nullptr;
 	bodyType myBodyType;
+	//Score Values
+	uint points;
 	//Bonus Values
 	bool active = false;
 	uint lastTime = NULL;

@@ -39,7 +39,6 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
-	LOG("%i,%i", App->input->GetMouseX(), App->input->GetMouseY());
 	static float powerPush = 0.0f;
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{

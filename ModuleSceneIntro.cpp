@@ -37,49 +37,49 @@ bool ModuleSceneIntro::Start()
 
 	//ADD GRAVES
 	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "3", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "3", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//////
 	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "3", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "3", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 	
 	circles.add(App->physics->CreateCircle(45, 684, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "4", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "2", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10,100, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
 	circles.add(App->physics->CreateCircle(255, 680, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, "1", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "1", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//
@@ -335,8 +335,6 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
 	up_right_flip = circles.getLast()->data;
 	
-	//Set Bonusvalue
-	actualBonus = 1;
 	return ret;
 }
 
@@ -352,7 +350,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(background, 0, 0);
-
+	LOG("myScore=%i, myBonus=%i", myScore,actualBonus);
 
 	for (p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it = it->next)
 	{
@@ -412,7 +410,7 @@ update_status ModuleSceneIntro::Update()
 			
 			it->data->bonusBody->lastTime = it->data->currentTime;
 			it->data->bonusBody->active = false;
-			actualBonus=it->data->bonusBody->bonusValue;
+			actualBonus-=it->data->bonusBody->bonusValue;
 			}
 		}
 
@@ -489,27 +487,29 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA->myBodyType == GRAVES && bodyA->life!=0)
 	{
 		bodyA->life--;
+		myScore += ToScore(bodyA->points);
 	}
 
 	if (bodyB->myBodyType == GRAVES && bodyB->life != 0)
 	{
 		bodyB->life--;
+		myScore += ToScore(bodyB->points);
 	}
 	if (bodyA->myBodyType == BONUS)
 	{
-		if (bodyA->active == false) {
-			bodyA->active = true;
+		if (bodyA->active == false) 
 			actualBonus += bodyA->bonusValue;
-		}
+		
+		bodyA->active = true;
 		bodyA->lastTime = SDL_GetTicks();
 	}
 
 	if (bodyB->myBodyType == BONUS)
 	{
-		if (bodyB->active == false) {
-			bodyB->active = true;
+		if (bodyB->active == false) 
 			actualBonus += bodyB->bonusValue;
-		}
+
+		bodyB->active = true;
 		bodyB->lastTime = SDL_GetTicks();
 
 	}
@@ -518,13 +518,22 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 }
 
-HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, const char* stoneNumber, PhysBody* stoneBody): stoneBody(stoneBody)
+uint ModuleSceneIntro::ToScore(uint score)
+{
+	uint ret;
+	if (actualBonus <= 0) 
+		actualBonus = 1;
+	
+	return ret = actualBonus*score;
+}
+
+HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, uint points, const char* stoneNumber, PhysBody* stoneBody): stoneBody(stoneBody)
 {
 	
 	uint i = 0;
 
 	stoneBody->life = life;
-
+	stoneBody->points = points;
 	p2SString tmp1("pinball/Sprites/Grave_%s_Ok.png", stoneNumber);
 	p2SString tmp2("pinball/Sprites/Grave_%s_Des.png", stoneNumber);
 
