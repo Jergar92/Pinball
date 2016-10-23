@@ -5,13 +5,18 @@
 #include "p2SString.h"
 #include "Globals.h"
 #include "p2DynArray.h"
-
+#define BONUS_TIME 10000
 class PhysBody;
 class ModuleSceneIntro;
+struct Brain {
+	Brain(ModuleSceneIntro* scene, uint points, PhysBody* lapidBody);
+	PhysBody* brainBody;
 
-struct HeadStone {
+};
+struct HeadStone 
+{
 
-	HeadStone(ModuleSceneIntro* scene, uint life,uint ac, const char* lapidnumber, PhysBody* lapidBody);
+	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, const char* lapidnumber, PhysBody* lapidBody);
 
 	SDL_Texture* texture[2];
 	PhysBody* stoneBody;
@@ -64,8 +69,8 @@ public:
 	PhysBody* up_left_flip;
 	PhysBody* up_right_flip;
 
+	Brain* brain;
 	p2List<HeadStone*> headstone;
-
 	p2List<Bonus*> listBonus;
 	//Score functions
 	uint ToScore(uint score);

@@ -35,6 +35,10 @@ bool ModuleSceneIntro::Start()
 	//ADD BALL
 	circles.add(App->physics->CreateCircle(305, 750, 6, 1, 0, ball));
 
+	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, NULL, HIT_OBJECT));
+	brain = new Brain(this, 100, circles.getLast()->data);
+	circles.getLast()->data->listener = this;
+
 	//ADD GRAVES
 	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, GRAVES));
 	headstone.add(new HeadStone(this, 10, 100, "4", circles.getLast()->data));
@@ -391,7 +395,7 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->bonusBody->body->GetPosition();
 
 		if (it->data->bonusBody->active == true) {
-			App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height - 5));
+			App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height));
 		}
 		
 	}
@@ -405,7 +409,7 @@ update_status ModuleSceneIntro::Update()
 		if (it->data->bonusBody->active == true ) {
 			it->data->currentTime = SDL_GetTicks();
 
-			if (it->data->bonusBody->lastTime + 10000 < it->data->currentTime)
+			if (it->data->bonusBody->lastTime + BONUS_TIME < it->data->currentTime)
 			{
 			
 			it->data->bonusBody->lastTime = it->data->currentTime;
@@ -549,5 +553,13 @@ Bonus::Bonus(ModuleSceneIntro * scene, const char * bonusNumber, PhysBody * bonu
 	currentTime = SDL_GetTicks();
 	bonusBody->lastTime = currentTime;
 	bonusBody->bonusValue = atoi(bonusNumber);
+
+}
+
+Brain::Brain(ModuleSceneIntro * scene, uint points, PhysBody * brainBody):brainBody(brainBody)
+{
+	brainBody->texture = scene->App->textures->Load("pinball/Sprites/brain.png");
+	brainBody->points = points;
+	brainBody->width += brainBody->width;
 
 }

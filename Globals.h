@@ -22,6 +22,7 @@ enum update_status
 enum bodyType
 {
 	FLIP,
+	HIT_OBJECT,
 	GRAVES,
 	BONUS,
 	CHAIN,

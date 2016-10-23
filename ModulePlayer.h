@@ -2,7 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
-
+struct SDL_Texture;
 class ModulePlayer : public Module
 {
 public:
@@ -15,6 +15,7 @@ public:
 
 public:
 
+	SDL_Texture* bounc;
 
 	PhysBody* bouncer;
 	PhysBody* bouncerWheel;
