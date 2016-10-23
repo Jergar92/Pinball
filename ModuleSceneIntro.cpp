@@ -78,7 +78,7 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 
 
-	circles.add(App->physics->CreateCircle(258, 680, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(255, 680, 15, 0, 1, NULL, GRAVES));
 	headstone.add(new HeadStone(this, 10, "1", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -335,6 +335,8 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
 	up_right_flip = circles.getLast()->data;
 	
+	//Set Bonusvalue
+	actualBonus = 1;
 	return ret;
 }
 
@@ -366,21 +368,21 @@ update_status ModuleSceneIntro::Update()
 	
 	for (p2List_item<HeadStone*>* it = headstone.getFirst(); it != nullptr; it = it->next){
 		
-		if (it->data->lapidBody->body == nullptr)
+		if (it->data->stoneBody->body == nullptr)
 			continue;
 		
-		b2Vec2 pos = it->data->lapidBody->body->GetPosition();
+		b2Vec2 pos = it->data->stoneBody->body->GetPosition();
 		
-		if (it->data->lapidBody->life > 6) {
-			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height - 5));
+		if (it->data->stoneBody->life > 6) {
+			App->renderer->Blit(it->data->texture[0], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
 		}
-		else if (it->data->lapidBody->life > 0)
+		else if (it->data->stoneBody->life > 0)
 		{
-			App->renderer->Blit(it->data->texture[1], METERS_TO_PIXELS(pos.x - it->data->lapidBody->width), METERS_TO_PIXELS(pos.y - it->data->lapidBody->height - 5));
+			App->renderer->Blit(it->data->texture[1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
 		}
-		else if (it->data->lapidBody->life == 0)
+		else if (it->data->stoneBody->life == 0)
 		{
-			App->physics->DestroyBody(it->data->lapidBody);
+			App->physics->DestroyBody(it->data->stoneBody);
 		}
 	}
 	for (p2List_item<Bonus*>* it = listBonus.getFirst(); it != nullptr; it = it->next) {
@@ -405,11 +407,12 @@ update_status ModuleSceneIntro::Update()
 		if (it->data->bonusBody->active == true ) {
 			it->data->currentTime = SDL_GetTicks();
 
-			if (it->data->lastTime + 10000 < it->data->currentTime)
+			if (it->data->bonusBody->lastTime + 10000 < it->data->currentTime)
 			{
 			
-			it->data->lastTime = it->data->currentTime;
+			it->data->bonusBody->lastTime = it->data->currentTime;
 			it->data->bonusBody->active = false;
+			actualBonus=it->data->bonusBody->bonusValue;
 			}
 		}
 
@@ -494,37 +497,48 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	if (bodyA->myBodyType == BONUS)
 	{
-		bodyA->active= true;
+		if (bodyA->active == false) {
+			bodyA->active = true;
+			actualBonus += bodyA->bonusValue;
+		}
+		bodyA->lastTime = SDL_GetTicks();
 	}
 
 	if (bodyB->myBodyType == BONUS)
 	{
-		bodyB->active = true;
+		if (bodyB->active == false) {
+			bodyB->active = true;
+			actualBonus += bodyB->bonusValue;
+		}
+		bodyB->lastTime = SDL_GetTicks();
+
 	}
 
 	
 
 }
 
-HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, const char* lapidnumber, PhysBody* lapidBody): lapidBody(lapidBody)
+HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, const char* stoneNumber, PhysBody* stoneBody): stoneBody(stoneBody)
 {
 	
 	uint i = 0;
 
-	lapidBody->life = life;
+	stoneBody->life = life;
 
-	p2SString tmp1("pinball/Sprites/Grave_%s_Ok.png", lapidnumber);
-	p2SString tmp2("pinball/Sprites/Grave_%s_Des.png", lapidnumber);
+	p2SString tmp1("pinball/Sprites/Grave_%s_Ok.png", stoneNumber);
+	p2SString tmp2("pinball/Sprites/Grave_%s_Des.png", stoneNumber);
 
 	texture[0]= scene->App->textures->Load(tmp1.GetString());
 	texture[1]= scene->App->textures->Load(tmp2.GetString());
 }
 
-Bonus::Bonus(ModuleSceneIntro * scene, const char * bonusnumber, PhysBody * lapidBody) : bonusBody(lapidBody)
+Bonus::Bonus(ModuleSceneIntro * scene, const char * bonusNumber, PhysBody * bonusBody) : bonusBody(bonusBody)
 {
-	p2SString tmp1("pinball/Sprites/x%s.png", bonusnumber);
+	
+	p2SString tmp1("pinball/Sprites/x%s.png", bonusNumber);
 	texture = scene->App->textures->Load(tmp1.GetString());
 	currentTime = SDL_GetTicks();
-	lastTime = currentTime;
+	bonusBody->lastTime = currentTime;
+	bonusBody->bonusValue = atoi(bonusNumber);
 
 }

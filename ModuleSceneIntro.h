@@ -14,7 +14,7 @@ struct HeadStone {
 	HeadStone(ModuleSceneIntro* scene, uint life, const char* lapidnumber, PhysBody* lapidBody);
 
 	SDL_Texture* texture[2];
-	PhysBody* lapidBody;
+	PhysBody* stoneBody;
 	~HeadStone(){}
 };
 struct Bonus {
@@ -23,9 +23,7 @@ struct Bonus {
 
 	SDL_Texture* texture;
 	PhysBody* bonusBody;
-	uint lastTime;
 	uint currentTime;
-
 	~Bonus() {}
 };
 
@@ -69,7 +67,10 @@ public:
 	p2List<HeadStone*> headstone;
 
 	p2List<Bonus*> listBonus;
-
+	//Score values
+	uint score;
+	uint actualBonus;
+	//
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
