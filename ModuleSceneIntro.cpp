@@ -27,8 +27,7 @@ bool ModuleSceneIntro::Start()
 	actualBonus = 1;
 
 	myScore = 0;
-	myLife = 0;
-	game_over = false;
+	myLife = 3;
 
 
 	//LoadMusic
@@ -590,15 +589,16 @@ update_status ModuleSceneIntro::Update()
 
 	//CHECK IF BALL IS UNDER THRESHOLD
 	b2Vec2 ballpos = ball->body->GetPosition();
-	if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT+20 && game_over == false)
+	if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT+20)
 	{
-		myLife--;
-		
-		if (myLife == -1)
-		{
-			game_over = true;
+		if(myLife>0)
+			myLife--;	
 
-			App->fade->FadeToBlack(this, this);
+
+		if (myLife == 0)
+		{
+
+			App->fade->FadeToBlack(this, this, 4.0);
 
 		}
 		else
@@ -613,9 +613,6 @@ update_status ModuleSceneIntro::Update()
 
 	//BLIT SCORE AND LIFES
 	p2SString title("Zomball Score: %i Balls: %i", myScore, myLife);
-
-	if (game_over)
-		title="GAME OVER- Score: %i", myScore;
 
 	App->window->SetTitle(title.GetString());
 

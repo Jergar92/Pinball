@@ -89,7 +89,7 @@ public:
 	uint myScore;
 	uint myLife;
 	uint actualBonus=1;
-	bool game_over;
+	 
 	
 	//Audios
 	uint gravesFx[4];
