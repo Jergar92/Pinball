@@ -9,9 +9,10 @@
 class PhysBody;
 class ModuleSceneIntro;
 struct Brain {
-	Brain(ModuleSceneIntro* scene, uint points, PhysBody* lapidBody);
+	Brain(ModuleSceneIntro* scene, uint points, uint fx, PhysBody* lapidBody);
 	PhysBody* brainBody;
 	uint points;
+	uint fx;
 
 
 };
@@ -93,6 +94,7 @@ public:
 	//Audios
 	uint gravesFx[4];
 	uint bonusFx;
+	uint brainFx;
 
 	p2Point<int> ray;
 	bool ray_on;

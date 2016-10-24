@@ -40,6 +40,7 @@ bool ModuleSceneIntro::Start()
 	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave3.wav");
 	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave4.wav");
 	bonusFx= App->audio->LoadFx("pinball/sounds/ding_snd.wav");
+	brainFx= App->audio->LoadFx("pinball/sounds/squish.wav");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -71,7 +72,7 @@ bool ModuleSceneIntro::Start()
 
 	//ADD BRAIN
 	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, brain_text, HIT_OBJECT));
-	brain = new Brain(this, 100, circles.getLast()->data);
+	brain = new Brain(this, 50, brainFx, circles.getLast()->data);
 	circles.getLast()->data->listener = this;
 
 	//ADD GRAVES
@@ -395,7 +396,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(ball_texture);
 	App->textures->Unload(left_flip);
 	App->textures->Unload(right_flip);
-
+	App->textures->Unload(brain_text);
 	
 	for (int i = 0; i < 4; i++)
 	{
@@ -627,7 +628,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-
+	if (brain->brainBody == bodyA) {
+		App->audio->PlayFx(brain->fx);
+		myScore += ToScore(brain->points);
+		return;
+	}
 
 	for (uint i = 0; i < headstone.count(); ++i) {
 		p2List_item<HeadStone*>* item = headstone.getFirst();
@@ -669,7 +674,6 @@ uint ModuleSceneIntro::ToScore(uint score)
 HeadStone::HeadStone(ModuleSceneIntro* scene, uint life, uint points, uint fx, int number, PhysBody* stoneBody) :
 	life(life), points(points), fx(fx), number(number), stoneBody(stoneBody)
 {
-
 }
 
 Bonus::Bonus(ModuleSceneIntro * scene, uint fx, int bonusValue, PhysBody * bonusBody) :
@@ -679,11 +683,10 @@ Bonus::Bonus(ModuleSceneIntro * scene, uint fx, int bonusValue, PhysBody * bonus
 	lastTime = currentTime;
 }
 
-Brain::Brain(ModuleSceneIntro * scene, uint points, PhysBody * brainBody) :brainBody(brainBody), points(points)
+Brain::Brain(ModuleSceneIntro * scene, uint points,uint fx, PhysBody * brainBody) :
+	 points(points),fx(fx),brainBody(brainBody)
 {
-
 	brainBody->width += brainBody->width;
-
 }
 
 
