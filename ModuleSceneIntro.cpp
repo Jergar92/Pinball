@@ -542,7 +542,7 @@ update_status ModuleSceneIntro::Update()
 			continue;
 		b2Vec2 pos = it->data->squeletonBody->body->GetPosition();
 
-		App->renderer->Blit(squeleton_tex[it->data->number - 1], METERS_TO_PIXELS(pos.x - it->data->squeletonBody->width), METERS_TO_PIXELS(pos.y - it->data->squeletonBody->height));
+		App->renderer->Blit(squeleton_tex[it->data->number], METERS_TO_PIXELS(pos.x - it->data->squeletonBody->width), METERS_TO_PIXELS(pos.y - it->data->squeletonBody->height));
 		
 	}
 
