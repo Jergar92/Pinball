@@ -60,7 +60,7 @@ bool ModuleSceneIntro::Start()
 	for (int i = 0; i < 4; i++)
 	{
 
-		p2SString tmp("pinball/Sprites/x%i.png", i + 1);
+		p2SString tmp("pinball/Sprites/x%i.png", i + 2);
 		bonus_tex[i] = App->textures->Load(tmp.GetString());
 	}
 
@@ -470,7 +470,7 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->bonusBody->body->GetPosition();
 
 		if (it->data->active == true) {
-			App->renderer->Blit(bonus_tex[it->data->bonusValue-1], METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height));
+			App->renderer->Blit(bonus_tex[it->data->bonusValue-2], METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height));
 		}
 
 	}
@@ -492,11 +492,11 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->stoneBody->body->GetPosition();
 		
 		if (it->data->life > 6) {
-			App->renderer->Blit(grave_ok[it->data->number], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
+			App->renderer->Blit(grave_ok[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
 		}
 		else if (it->data->life > 0)
 		{
-			App->renderer->Blit(grave_des[it->data->number], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
+			App->renderer->Blit(grave_des[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
 		}
 		else if (it->data->life == 0)
 		{
@@ -626,14 +626,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-
-
-	/*if (bodyA == sensor)
-	{
-		
-
-		return;
-	}*/
 
 
 	for (uint i = 0; i < headstone.count(); ++i) {
