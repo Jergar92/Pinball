@@ -63,7 +63,7 @@ public:
 
 	
 	SDL_Texture* background;
-	SDL_Texture* ball;
+	SDL_Texture* ball_texture;
 	SDL_Texture* left_flip;
 	SDL_Texture* right_flip;
 
@@ -76,6 +76,8 @@ public:
 	PhysBody* mid_right_flip;
 	PhysBody* up_left_flip;
 	PhysBody* up_right_flip;
+
+	PhysBody* ball;
 
 	Brain* brain;
 	p2List<HeadStone*> headstone;

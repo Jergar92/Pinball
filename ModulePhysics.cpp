@@ -350,7 +350,7 @@ update_status ModulePhysics::PostUpdate()
 					mouse_joint->SetTarget(PIXEL_TO_METERS(mouse_pos));
 					b2Vec2 target_pos = mouse_joint->GetTarget();
 
-					App->renderer->DrawLine(mouse_pos.x, mouse_pos.y, target_pos.x, target_pos.y, 255, 1, 1);
+				//	App->renderer->DrawLine(mouse_pos.x, mouse_pos.y, target_pos.x, target_pos.y, 255, 1, 1);
 				
 
 				if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN) {
@@ -503,6 +503,7 @@ bool ModulePhysics::DestroyBody(PhysBody * to_delete)
 
 	world->DestroyBody(to_delete->body);
 	to_delete->body = nullptr;
+
 	return true;
 }
 

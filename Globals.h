@@ -30,7 +30,7 @@ enum bodyType
 };
 // Configuration -----------
 #define SCREEN_WIDTH 326
-#define SCREEN_HEIGHT 1000//850
+#define SCREEN_HEIGHT 850
 #define SCREEN_SIZE 1
 #define WIN_FULLSCREEN false
 #define WIN_RESIZABLE true

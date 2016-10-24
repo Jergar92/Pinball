@@ -37,13 +37,15 @@ bool ModuleSceneIntro::Start()
 
 	
 	background = App->textures->Load("pinball/pinball_back.png");
-	ball = App->textures->Load("pinball/ball.png");
+	ball_texture = App->textures->Load("pinball/ball.png");
 	left_flip= App->textures->Load("pinball/Sprites/FlipLeft.png");
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 
 	//ADD BALL
-	circles.add(App->physics->CreateCircle(305, 750, 6, 1, 0, ball));
+	ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
+	ball->body->IsBullet();
 
+	//ADD BRAIN
 	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, NULL, HIT_OBJECT));
 	brain = new Brain(this, 100, circles.getLast()->data);
 	circles.getLast()->data->listener = this;
@@ -78,20 +80,20 @@ bool ModuleSceneIntro::Start()
 	headstone.add(new HeadStone(this, 10, 100, "3", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(240, 607, 15, 0,1, NULL, GRAVES));
 	headstone.add(new HeadStone(this, 10, 100, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 	
-	circles.add(App->physics->CreateCircle(45, 684, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(40, 684, 15, 0, 1, NULL, GRAVES));
 	headstone.add(new HeadStone(this, 10, 100, "4", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
+
 	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10,100, "2", circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, "2", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-
-	circles.add(App->physics->CreateCircle(255, 680, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(250, 680, 15, 0, 1, NULL, GRAVES));
 	headstone.add(new HeadStone(this, 10, 100, "1", circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -141,6 +143,7 @@ bool ModuleSceneIntro::Start()
 	bonus.getLast()->data->listener = this;
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
+	sensor->listener = this;
 
 	// Pivot 0, 0
 	int pinball_exterior[184] = {
@@ -296,9 +299,9 @@ bool ModuleSceneIntro::Start()
 		238, 774,
 		230, 789,
 		217, 799,
-		203, 805,
-		203, 818,
-		217, 820 };
+		202, 805,
+		204, 814,
+		214, 821 };
 
 
 	chains.add(App->physics->CreateChain(0, 0, pinball_exterior, 184, 0));
@@ -311,6 +314,24 @@ bool ModuleSceneIntro::Start()
 	
 
 	//ADD FLIPPERS
+
+		//BOTTOM LEFT
+	circles.add(App->physics->CreateCircle(86, 816, 6, 0));
+	boxes.add(App->physics->CreateRectangle(86 + 25, 816, 50, 12, 1, left_flip, FLIP));
+	boxes.getLast()->data->listener = this;
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
+	circles.add(App->physics->CreateCircle(86 + 25, 836, 6, 1));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
+	low_left_flip = circles.getLast()->data;
+
+     	//BOTTOM RIGHT
+	circles.add(App->physics->CreateCircle(205, 814, 6, 0));
+	boxes.add(App->physics->CreateRectangle(205 - 25, 814, 50, 12, 1, right_flip, FLIP));
+	boxes.getLast()->data->listener = this;
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
+	circles.add(App->physics->CreateCircle(205 - 25, 834, 6, 1));
+	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
+	low_right_flip = circles.getLast()->data;
 
 		//MID LEFT
 	circles.add(App->physics->CreateCircle(85, 530, 6, 0));
@@ -356,7 +377,7 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 	App->textures->Unload(background);
-	App->textures->Unload(ball);
+	App->textures->Unload(ball_texture);
 	App->textures->Unload(left_flip);
 	App->textures->Unload(right_flip);
 	return true;
@@ -367,6 +388,8 @@ update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(background, 0, 0);
 	LOG("myScore=%i, myBonus=%i", myScore,actualBonus);
+
+
 
 	for (p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it = it->next)
 	{
@@ -379,7 +402,27 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
 	}
 
+
+	for (p2List_item<Bonus*>* it = listBonus.getFirst(); it != nullptr; it = it->next) {
+
+		if (it->data->bonusBody->body == nullptr)
+			continue;
+
+		b2Vec2 pos = it->data->bonusBody->body->GetPosition();
+
+		if (it->data->active == true) {
+			App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height));
+		}
+
+	}
+
+
+	//Blit Ball
+	{		b2Vec2 pos =ball->body->GetPosition();
 	
+	App->renderer->Blit(ball->texture, METERS_TO_PIXELS(pos.x - ball->width), METERS_TO_PIXELS(pos.y - ball->height)); }
+
+
 	for (p2List_item<HeadStone*>* it = headstone.getFirst(); it != nullptr; it = it->next){
 		
 		if (it->data->stoneBody->body == nullptr)
@@ -399,18 +442,8 @@ update_status ModuleSceneIntro::Update()
 			App->physics->DestroyBody(it->data->stoneBody);
 		}
 	}
-	for (p2List_item<Bonus*>* it = listBonus.getFirst(); it != nullptr; it = it->next) {
 
-		if (it->data->bonusBody->body == nullptr)
-			continue;
 
-		b2Vec2 pos = it->data->bonusBody->body->GetPosition();
-
-		if (it->data->active == true) {
-			App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->bonusBody->width), METERS_TO_PIXELS(pos.y - it->data->bonusBody->height));
-		}
-		
-	}
 
 	for (p2List_item<Bonus*>* it = listBonus.getFirst(); it != nullptr; it = it->next) {
 
@@ -453,25 +486,22 @@ update_status ModuleSceneIntro::Update()
 		angle = RADTODEG*it->data->body->GetAngle();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
 
+		it = it->next;
+		pos = it->data->body->GetPosition();
+		angle = RADTODEG*it->data->body->GetAngle();
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
+
+		it = it->next;
+		pos = it->data->body->GetPosition();
+		angle = RADTODEG*it->data->body->GetAngle();
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
 
 
-	//TO DELETE
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		circles.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -60), true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		//App->renderer->camera.y--;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	{
-		App->renderer->camera.y++;
-	}
 
 	//APPLY FORCES TO FLIPPERS
 
+	low_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+	low_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 	mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 	mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 	up_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
@@ -481,13 +511,27 @@ update_status ModuleSceneIntro::Update()
 	{
 		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
 		up_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
-
+		low_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
 		up_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+		low_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+
+	}
+
+
+
+
+	//CHECK IF BALL IS UNDER THRESHOLD
+	b2Vec2 ballpos = ball->body->GetPosition();
+	if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT)
+	{
+		App->physics->DestroyBody(ball);
+		delete ball;
+		ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
 
 	}
 
@@ -497,6 +541,8 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
+
+
 	for (uint i = 0; i < headstone.count(); ++i) {
 		p2List_item<HeadStone*>* item = headstone.getFirst();
 		for (; item != NULL; item = item->next) {
