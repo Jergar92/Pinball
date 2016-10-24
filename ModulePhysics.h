@@ -56,6 +56,8 @@ public:
 
 	bool DestroyBody(PhysBody* to_delete);
 
+
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 

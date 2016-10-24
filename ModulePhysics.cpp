@@ -16,7 +16,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -446,10 +446,10 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-	if(physA && physA->listener != NULL)
+	if(physA  && physA->listener != NULL)
 		physA->listener->OnCollision(physA, physB);
 
-	if(physB && physB->listener != NULL)
+	if(physB  && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 }
 
@@ -501,9 +501,11 @@ b2DistanceJointDef* ModulePhysics::CreateLineJoint(b2Body* bodyA, b2Body* bodyB,
 bool ModulePhysics::DestroyBody(PhysBody * to_delete)
 {
 
+	if (to_delete == nullptr || to_delete->body==nullptr)
+		return true;
+
 	world->DestroyBody(to_delete->body);
 	to_delete->body = nullptr;
-
 	return true;
 }
 

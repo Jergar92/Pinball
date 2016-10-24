@@ -18,9 +18,10 @@ struct Brain {
 struct HeadStone 
 {
 
-	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, const char* lapidnumber, PhysBody* lapidBody);
+	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, int lapidnumber, PhysBody* lapidBody);
+	
 	int life = 0;
-	SDL_Texture* texture[2];
+	int number;
 	PhysBody* stoneBody;
 	uint points;
 	uint fx;
@@ -28,9 +29,8 @@ struct HeadStone
 };
 struct Bonus {
 
-	Bonus(ModuleSceneIntro* scene, const char* bonusnumber, PhysBody* lapidBody);
+	Bonus(ModuleSceneIntro* scene, int bonusnumber, PhysBody* lapidBody);
 
-	SDL_Texture* texture;
 	PhysBody* bonusBody;
 	bool active = false;
 	uint fx;
@@ -67,6 +67,10 @@ public:
 	SDL_Texture* left_flip;
 	SDL_Texture* right_flip;
 
+	SDL_Texture*  grave_ok[4];
+	SDL_Texture* grave_des[4];
+
+	SDL_Texture* bonus_tex[4];
 
 	p2List_item<PhysBody*>* flips_start;
 
@@ -82,12 +86,16 @@ public:
 	Brain* brain;
 	p2List<HeadStone*> headstone;
 	p2List<Bonus*> listBonus;
+	
 	//Score functions
 	uint ToScore(uint score);
-	//Score values
+	
+	//Score and life values
 	uint myScore;
 	uint myLife;
 	uint actualBonus=1;
+	bool game_over;
+	
 	//Audios
 	uint gravesFx[4];
 	uint bonusFx;

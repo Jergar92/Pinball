@@ -38,3 +38,4 @@ enum bodyType
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "2D Physics Playground"
+#define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )

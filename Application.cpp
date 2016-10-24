@@ -1,4 +1,3 @@
-
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
@@ -8,6 +7,7 @@
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleFadeToBlack.h"
 
 #include "Application.h"
 
@@ -21,7 +21,8 @@ Application::Application()
 	player = new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
-
+	fade = new ModuleFadeToBlack(this);
+	
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -33,12 +34,15 @@ Application::Application()
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
-	
 	// Scenes
 	AddModule(scene_intro);
 	
 	// Player
 	AddModule(player);
+
+	//Fade
+	AddModule(fade);
+
 }
 
 Application::~Application()
