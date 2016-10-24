@@ -24,6 +24,7 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+	actualBonus = 1;
 
 	myScore = 0;
 	myLife = 0;
@@ -47,7 +48,7 @@ bool ModuleSceneIntro::Start()
 	ball_texture = App->textures->Load("pinball/ball.png");
 	left_flip= App->textures->Load("pinball/Sprites/FlipLeft.png");
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
-
+	brain_text = App->textures->Load("pinball/Sprites/brain.png");
 	for (int i = 0; i < 4; i++)
 	{
 		p2SString tmp1("pinball/Sprites/Grave_%i_Ok.png", i+1);
@@ -69,100 +70,100 @@ bool ModuleSceneIntro::Start()
 	ball->body->IsBullet();
 
 	//ADD BRAIN
-	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, brain_text, HIT_OBJECT));
 	brain = new Brain(this, 100, circles.getLast()->data);
 	circles.getLast()->data->listener = this;
 
 	//ADD GRAVES
 	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 3, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 2, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 2, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//////
 	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 3, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(240, 607, 15, 0,1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 2, circles.getLast()->data));
+	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
-	
+
 	circles.add(App->physics->CreateCircle(40, 684, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
 	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 2, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(250, 680, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, 1, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 100, gravesFx[0], 1, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//
 	circles.add(App->physics->CreateCircleSensor(95, 380, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,3, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircleSensor(185, 380, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,3, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircleSensor(140, 425, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,5, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 5, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircleSensor(140, 485, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,2, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircleSensor(90, 585, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 3, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(190, 585,10, 0, BONUS));
-	listBonus.add(new Bonus(this, 3, circles.getLast()->data));
+	circles.add(App->physics->CreateCircleSensor(190, 585, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircleSensor(115, 610, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 2, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircleSensor(170, 610, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 2, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(140, 655	, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 4, circles.getLast()->data));
+	circles.add(App->physics->CreateCircleSensor(140, 655, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, bonusFx, 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircleSensor(140, 685, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 3, circles.getLast()->data));
+	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(140, 725,10, 0, BONUS));
-	listBonus.add(new Bonus(this, 2, circles.getLast()->data));
+	circles.add(App->physics->CreateCircleSensor(140, 725, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	// Pivot 0, 0
@@ -665,30 +666,24 @@ uint ModuleSceneIntro::ToScore(uint score)
 	return ret = actualBonus*score;
 }
 
-HeadStone::HeadStone(ModuleSceneIntro* scene ,uint life, uint points, int stoneNumber, PhysBody* stoneBody): stoneBody(stoneBody),life(life), points(points)
+HeadStone::HeadStone(ModuleSceneIntro* scene, uint life, uint points, uint fx, int number, PhysBody* stoneBody) :
+	life(life), points(points), fx(fx), number(number), stoneBody(stoneBody)
 {
-	
-	uint i = 0;
-	number = stoneNumber;
-	p2SString strFx("pinball/sounds/grave%i.wav", stoneNumber);
-	fx = scene->App->audio->LoadFx(strFx.GetString());
 
 }
 
-Bonus::Bonus(ModuleSceneIntro * scene, int bonusNumber, PhysBody * bonusBody) : bonusBody(bonusBody)
+Bonus::Bonus(ModuleSceneIntro * scene, uint fx, int bonusValue, PhysBody * bonusBody) :
+	fx(fx), bonusValue(bonusValue), bonusBody(bonusBody)
 {
-	
-	fx = scene->App->audio->LoadFx("pinball/sounds/ding_snd.wav");
-	
 	currentTime = SDL_GetTicks();
 	lastTime = currentTime;
-	bonusValue = bonusNumber;
-
 }
 
-Brain::Brain(ModuleSceneIntro * scene, uint points, PhysBody * brainBody):brainBody(brainBody),points(points)
+Brain::Brain(ModuleSceneIntro * scene, uint points, PhysBody * brainBody) :brainBody(brainBody), points(points)
 {
-	brainBody->texture = scene->App->textures->Load("pinball/Sprites/brain.png");
+
 	brainBody->width += brainBody->width;
 
 }
+
+

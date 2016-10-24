@@ -18,7 +18,7 @@ struct Brain {
 struct HeadStone 
 {
 
-	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, int lapidnumber, PhysBody* lapidBody);
+	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, uint fx, int lapidnumber, PhysBody* lapidBody);
 	
 	int life = 0;
 	int number;
@@ -29,7 +29,7 @@ struct HeadStone
 };
 struct Bonus {
 
-	Bonus(ModuleSceneIntro* scene, int bonusnumber, PhysBody* lapidBody);
+	Bonus(ModuleSceneIntro* scene,uint fx, int bonusnumber, PhysBody* lapidBody);
 
 	PhysBody* bonusBody;
 	bool active = false;
@@ -64,6 +64,7 @@ public:
 	SDL_Texture*  grave_ok[4];
 	SDL_Texture* grave_des[4];
 	SDL_Texture* bonus_tex[4];
+	SDL_Texture* brain_text;
 
 	p2List_item<PhysBody*>* flips_start;
 
