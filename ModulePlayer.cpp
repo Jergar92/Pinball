@@ -23,7 +23,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	bounc = App->textures->Load("pinball/Sprites/Bumper.png");
 
-
+	bouncerFx = App->audio->LoadFx("pinball/sounds/charge.wav");
 	bouncer = App->physics->CreateRectangle(305, 840, 18, 18, 1, bounc);
 	bouncerWheel = App->physics->CreateRectangle(305, 840, 10, 0, 0);
 	App->physics->CreateLineJoint(bouncer->body, bouncerWheel->body, p2Point<float>(0, 0), p2Point<float>(0, 0), 30.0f, 0.0f);
@@ -45,8 +45,11 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 	static float powerPush = 0.0f;//Update don't modifique this
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
+		if (powerPush == 2000.0f) {
+			App->audio->PlayFx(bouncerFx);
+		}
 		powerPush += 100.0f;
 		bouncer->body->ApplyForceToCenter(b2Vec2(0, powerPush), true);
 	}

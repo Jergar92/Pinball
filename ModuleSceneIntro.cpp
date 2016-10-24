@@ -40,6 +40,7 @@ bool ModuleSceneIntro::Start()
 	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave4.wav");
 	bonusFx= App->audio->LoadFx("pinball/sounds/ding_snd.wav");
 	brainFx= App->audio->LoadFx("pinball/sounds/squish.wav");
+	squeletonFx = App->audio->LoadFx("pinball/sounds/squeleton_hit.wav");
 	Game_Over_Laugh = App->audio->LoadFx("pinball/sounds/laugh.wav");
 	EvilLaugh = App->audio->LoadFx("pinball/sounds/evillaugh.wav");
 
@@ -175,19 +176,19 @@ bool ModuleSceneIntro::Start()
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(94, 585, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(94, 587, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(200, 585, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(200, 587, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(119, 611, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(119, 613, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(174, 611, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(174, 613, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -679,7 +680,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		myScore += ToScore(brain->points);
 		return;
 	}
-
+	for (uint i = 0; i < squeletons.count(); ++i) {
+		p2List_item<Squeleton*>* item = squeletons.getFirst();
+		for (; item != NULL; item = item->next) {
+			if (item->data->squeletonBody == bodyA) {
+				App->audio->PlayFx(item->data->fx);
+				myScore += ToScore(item->data->points);
+				return;
+			}
+		}
+	}
 	for (uint i = 0; i < headstone.count(); ++i) {
 		p2List_item<HeadStone*>* item = headstone.getFirst();
 		for (; item != NULL; item = item->next) {
