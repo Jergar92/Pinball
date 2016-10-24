@@ -64,6 +64,12 @@ bool ModuleSceneIntro::Start()
 		p2SString tmp("pinball/Sprites/x%i.png", i + 2);
 		bonus_tex[i] = App->textures->Load(tmp.GetString());
 	}
+	for (int i = 0; i < 5; i++)
+	{
+		//0 look east 1 look south-east 2 look south 3 look south-west 4 look west
+		p2SString tmp("pinball/Sprites/Squeleton_%i.png", i);
+		squeleton_tex[i] = App->textures->Load(tmp.GetString());
+	}
 
 	//ADD BALL
 	ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
@@ -71,54 +77,75 @@ bool ModuleSceneIntro::Start()
 
 	//ADD BRAIN
 	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, brain_text, HIT_OBJECT));
-	brain = new Brain(this, 50, brainFx, circles.getLast()->data);
+	brain = new Brain(this, 10, brainFx, circles.getLast()->data);
+	circles.getLast()->data->listener = this;
+
+	//ADD SQUELETONS
+	circles.add(App->physics->CreateCircle(150, 100, 15, 0, 1, NULL, HIT_OBJECT));
+	squeletons.add(new Squeleton(this, 8, squeletonFx,0, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(165, 90, 15, 0, 1, NULL, HIT_OBJECT));
+	squeletons.add(new Squeleton(this, 8, squeletonFx, 1, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(180, 80, 15, 0, 1, NULL, HIT_OBJECT));
+	squeletons.add(new Squeleton(this, 8, squeletonFx, 2, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(195, 90, 15, 0, 1, NULL, HIT_OBJECT));
+	squeletons.add(new Squeleton(this, 8, squeletonFx, 3, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(210, 100, 15, 0, 1, NULL, HIT_OBJECT));
+	squeletons.add(new Squeleton(this, 8, squeletonFx, 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//ADD GRAVES
 	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[2], 3, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//////
 	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[2], 3, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(40, 684, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[3], 4, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
 	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[1], 2, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	circles.add(App->physics->CreateCircle(250, 680, 15, 0, 1, NULL, GRAVES));
-	headstone.add(new HeadStone(this, 10, 100, gravesFx[0], 1, circles.getLast()->data));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[0], 1, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//
@@ -403,8 +430,10 @@ bool ModuleSceneIntro::CleanUp()
 		App->textures->Unload(grave_des[i]);
 		App->textures->Unload(bonus_tex[i]);
 	}
-
-
+	for (int i = 0; i < 5; i++)
+	{
+		App->textures->Unload(squeleton_tex[i]);
+	}
 
 
 
@@ -504,7 +533,16 @@ update_status ModuleSceneIntro::Update()
 			App->physics->DestroyBody(it->data->stoneBody);
 		}
 	}
+	// Blit Squeletons
+	for (p2List_item<Squeleton*>* it = squeletons.getFirst(); it != nullptr; it = it->next) {
+		LOG("I'M HERE");
+		if (it->data->squeletonBody->body == nullptr)
+			continue;
+		b2Vec2 pos = it->data->squeletonBody->body->GetPosition();
 
+		App->renderer->Blit(squeleton_tex[it->data->number - 1], METERS_TO_PIXELS(pos.x - it->data->squeletonBody->width), METERS_TO_PIXELS(pos.y - it->data->squeletonBody->height));
+		
+	}
 
 	//Check Bonus Times
 	for (p2List_item<Bonus*>* it = listBonus.getFirst(); it != nullptr; it = it->next) {
@@ -684,6 +722,10 @@ Brain::Brain(ModuleSceneIntro * scene, uint points,uint fx, PhysBody * brainBody
 	 points(points),fx(fx),brainBody(brainBody)
 {
 	brainBody->width += brainBody->width;
+}
+Squeleton::Squeleton(ModuleSceneIntro * scene, uint points, uint fx, int number, PhysBody * squeletonBody) :
+	points(points), fx(fx),number(number), squeletonBody(squeletonBody)
+{
 }
 
 
