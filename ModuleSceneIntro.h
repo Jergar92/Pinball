@@ -9,7 +9,7 @@
 class PhysBody;
 class ModuleSceneIntro;
 struct Brain {
-	Brain(ModuleSceneIntro* scene, uint points, uint fx, PhysBody* lapidBody);
+	Brain(ModuleSceneIntro* scene, uint points, uint fx, PhysBody* brainBody);
 	PhysBody* brainBody;
 	uint points;
 	uint fx;
@@ -19,7 +19,7 @@ struct Brain {
 struct HeadStone 
 {
 
-	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, uint fx, int lapidnumber, PhysBody* lapidBody);
+	HeadStone(ModuleSceneIntro* scene, uint points,uint ac, uint fx, int lapidnumber, PhysBody* stoneBody);
 	
 	int life = 0;
 	int number;
@@ -28,9 +28,19 @@ struct HeadStone
 	uint fx;
 	~HeadStone(){}
 };
+struct Squeleton
+{
+
+	Squeleton(ModuleSceneIntro* scene, uint points, uint fx, int squeletonNumber, PhysBody* squeletonBody);
+
+	int number;
+	PhysBody* squeletonBody;
+	uint points;
+	uint fx;
+};
 struct Bonus {
 
-	Bonus(ModuleSceneIntro* scene,uint fx, int bonusnumber, PhysBody* lapidBody);
+	Bonus(ModuleSceneIntro* scene,uint fx, int bonusnumber, PhysBody* bonusBody);
 
 	PhysBody* bonusBody;
 	bool active = false;
@@ -66,7 +76,7 @@ public:
 	SDL_Texture* grave_des[4];
 	SDL_Texture* bonus_tex[4];
 	SDL_Texture* brain_text;
-
+	SDL_Texture* squeleton_tex[5];
 	p2List_item<PhysBody*>* flips_start;
 
 	PhysBody* low_left_flip;
@@ -81,7 +91,8 @@ public:
 	Brain* brain;
 	p2List<HeadStone*> headstone;
 	p2List<Bonus*> listBonus;
-	
+	p2List<Squeleton*> squeletons;
+
 	//Score functions
 	uint ToScore(uint score);
 	
@@ -95,8 +106,11 @@ public:
 	uint gravesFx[4];
 	uint bonusFx;
 	uint brainFx;
+
 	uint EvilLaugh;
 	uint Game_Over_Laugh;
+
+	uint squeletonFx;
 
 	p2Point<int> ray;
 	bool ray_on;
