@@ -83,23 +83,23 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 
 	//ADD SQUELETONS
-	circles.add(App->physics->CreateCircle(150, 100, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(20, 90, 15, 0, 1, NULL, HIT_OBJECT));
 	squeletons.add(new Squeleton(this, 8, squeletonFx,0, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(165, 90, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(60, 55, 15, 0, 1, NULL, HIT_OBJECT));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 1, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(180, 80, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(160, 20, 15, 0, 1, NULL, HIT_OBJECT));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(195, 90, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(250, 50, 15, 0, 1, NULL, HIT_OBJECT));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(210, 100, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(300, 90, 15, 0, 1, NULL, HIT_OBJECT));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -197,11 +197,11 @@ bool ModuleSceneIntro::Start()
 
 	// Pivot 0, 0
 	int pinball_exterior[184] = {
-		162, 33,
-		191, 36,
-		233, 47,
-		276, 70,
-		293, 91,
+		162, 23,
+		191, 26,
+		233, 37,
+		276, 60,
+		293, 81,
 		301, 99,
 		312, 119,
 		315, 145,
@@ -283,12 +283,12 @@ bool ModuleSceneIntro::Start()
 		10, 143,
 		13, 112,
 		24, 87,
-		42, 72,
-		64, 57,
-		82, 48,
-		102, 42,
-		130, 35,
-		159, 33
+		42, 62,
+		64, 47,
+		82, 38,
+		102, 32,
+		130, 25,
+		159, 23
 	};
 
 	int flip_1[18] = { 63, 193,
@@ -537,7 +537,6 @@ update_status ModuleSceneIntro::Update()
 	}
 	// Blit Squeletons
 	for (p2List_item<Squeleton*>* it = squeletons.getFirst(); it != nullptr; it = it->next) {
-		LOG("I'M HERE");
 		if (it->data->squeletonBody->body == nullptr)
 			continue;
 		b2Vec2 pos = it->data->squeletonBody->body->GetPosition();
