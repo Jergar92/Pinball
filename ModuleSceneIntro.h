@@ -86,6 +86,7 @@ public:
 	uint ToScore(uint score);
 	//Score values
 	uint myScore;
+	uint myLife;
 	uint actualBonus=1;
 	//Audios
 	uint gravesFx[4];

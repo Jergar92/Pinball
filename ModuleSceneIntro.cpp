@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRender.h"
+#include "ModuleWindow.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleInput.h"
 #include "ModuleTextures.h"
@@ -13,6 +14,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	background = NULL;
 	ray_on = false;
 	sensed = false;
+	myScore = 0;
+	myLife = 3;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -142,7 +145,7 @@ bool ModuleSceneIntro::Start()
 	listBonus.add(new Bonus(this, "2", bonus.getLast()->data));
 	bonus.getLast()->data->listener = this;
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 870, SCREEN_WIDTH, 50);
+	sensor = App->physics->CreateRectangleSensor(145, 870, 155, 15);
 	sensor->listener = this;
 
 	// Pivot 0, 0
@@ -316,11 +319,11 @@ bool ModuleSceneIntro::Start()
 	//ADD FLIPPERS
 
 		//BOTTOM LEFT
-	circles.add(App->physics->CreateCircle(86, 816, 6, 0));
-	boxes.add(App->physics->CreateRectangle(86 + 25, 816, 50, 12, 1, left_flip, FLIP));
+	circles.add(App->physics->CreateCircle(88, 816, 6, 0));
+	boxes.add(App->physics->CreateRectangle(88 + 25, 816, 50, 12, 1, left_flip, FLIP));
 	boxes.getLast()->data->listener = this;
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
-	circles.add(App->physics->CreateCircle(86 + 25, 836, 6, 1));
+	circles.add(App->physics->CreateCircle(88 + 25, 836, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
 	low_left_flip = circles.getLast()->data;
 
@@ -469,32 +472,32 @@ update_status ModuleSceneIntro::Update()
 
 		b2Vec2 pos = it->data->body->GetPosition();
 		float angle = RADTODEG*it->data->body->GetAngle();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-7), METERS_TO_PIXELS(pos.y - it->data->height-9), NULL, NULL, angle);
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-7), METERS_TO_PIXELS(pos.y - it->data->height-12), NULL, NULL, angle);
 	
 		it = it->next;
 		pos = it->data->body->GetPosition();
 		angle = RADTODEG*it->data->body->GetAngle();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-5), METERS_TO_PIXELS(pos.y - it->data->height-10), NULL, NULL, angle);
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width-5), METERS_TO_PIXELS(pos.y - it->data->height-14), NULL, NULL, angle);
 
 		it = it->next;
 		pos = it->data->body->GetPosition();
 		angle = RADTODEG*it->data->body->GetAngle();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 12), NULL, NULL, angle);
 
 		it = it->next;
 		pos = it->data->body->GetPosition();
 		angle = RADTODEG*it->data->body->GetAngle();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 14), NULL, NULL, angle);
 
 		it = it->next;
 		pos = it->data->body->GetPosition();
 		angle = RADTODEG*it->data->body->GetAngle();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 12), NULL, NULL, angle);
 
 		it = it->next;
 		pos = it->data->body->GetPosition();
 		angle = RADTODEG*it->data->body->GetAngle();
-		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 10), NULL, NULL, angle);
+		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width - 5), METERS_TO_PIXELS(pos.y - it->data->height - 14), NULL, NULL, angle);
 
 
 
@@ -509,16 +512,16 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
-		up_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
-		low_left_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		up_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		low_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
-		up_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
-		low_right_flip->body->ApplyForceToCenter(b2Vec2(0, -90), true);
+		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		up_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		low_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
 
 	}
 
@@ -527,7 +530,7 @@ update_status ModuleSceneIntro::Update()
 
 	//CHECK IF BALL IS UNDER THRESHOLD
 	b2Vec2 ballpos = ball->body->GetPosition();
-	if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT)
+	if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT+20)
 	{
 		App->physics->DestroyBody(ball);
 		delete ball;
@@ -535,12 +538,25 @@ update_status ModuleSceneIntro::Update()
 
 	}
 
+
+	//BLIT SCORE AND LIFES
+	p2SString title("Zomball Score: %i Balls: %i", myScore, myLife);
+	App->window->SetTitle(title.GetString());
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
+
+
+
+	/*if (bodyA == sensor)
+	{
+		
+
+		return;
+	}*/
 
 
 	for (uint i = 0; i < headstone.count(); ++i) {
@@ -568,6 +584,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			}
 		}
 	}
+
 }
 
 uint ModuleSceneIntro::ToScore(uint score)
