@@ -13,9 +13,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	background = NULL;
-	ray_on = false;
-	sensed = false;
-	
+	ray_on = false;	
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -123,52 +121,49 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 
 	//
-	bonus.add(App->physics->CreateCircleSensor(95, 380, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,3, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(95, 380, 10, 0, BONUS));
+	listBonus.add(new Bonus(this,3, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(185, 380, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,3, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(185, 380, 10, 0, BONUS));
+	listBonus.add(new Bonus(this,3, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(140, 425, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,5, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(140, 425, 10, 0, BONUS));
+	listBonus.add(new Bonus(this,5, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(140, 485, 10, 0, BONUS));
-	listBonus.add(new Bonus(this,2, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(140, 485, 10, 0, BONUS));
+	listBonus.add(new Bonus(this,2, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(90, 585, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 3, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(90, 585, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, 3, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(190, 585,10, 0, BONUS));
-	listBonus.add(new Bonus(this, 3, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(190, 585,10, 0, BONUS));
+	listBonus.add(new Bonus(this, 3, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(115, 610, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 2, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(115, 610, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, 2, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(170, 610, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 2, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(170, 610, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, 2, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(140, 655	, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 4, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(140, 655	, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, 4, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(140, 685, 10, 0, BONUS));
-	listBonus.add(new Bonus(this, 3, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
+	circles.add(App->physics->CreateCircleSensor(140, 685, 10, 0, BONUS));
+	listBonus.add(new Bonus(this, 3, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
-	bonus.add(App->physics->CreateCircleSensor(140, 725,10, 0, BONUS));
-	listBonus.add(new Bonus(this, 2, bonus.getLast()->data));
-	bonus.getLast()->data->listener = this;
-
-	sensor = App->physics->CreateRectangleSensor(145, 870, 155, 15);
-	sensor->listener = this;
+	circles.add(App->physics->CreateCircleSensor(140, 725,10, 0, BONUS));
+	listBonus.add(new Bonus(this, 2, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
 
 	// Pivot 0, 0
 	int pinball_exterior[184] = {
@@ -442,24 +437,6 @@ bool ModuleSceneIntro::CleanUp()
 	}
 	listBonus.clear();
 
-
-
-	/*delete low_left_flip;
-	low_left_flip = nullptr;
-	delete low_right_flip;
-	low_right_flip = nullptr;
-	delete mid_left_flip;
-	mid_left_flip = nullptr;
-	delete mid_right_flip;
-	mid_right_flip = nullptr;
-	delete up_left_flip;
-	up_left_flip = nullptr;
-	delete up_right_flip;
-	up_right_flip = nullptr;
-
-	delete ball;
-	ball->listener = nullptr;
-	ball = nullptr;*/
 
 	return true;
 }

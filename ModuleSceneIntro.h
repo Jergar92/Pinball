@@ -56,20 +56,13 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> chains;
 
-	p2List<PhysBody*> bonus;
-
-	PhysBody* sensor;
-	bool sensed;
-
 	
 	SDL_Texture* background;
 	SDL_Texture* ball_texture;
 	SDL_Texture* left_flip;
 	SDL_Texture* right_flip;
-
 	SDL_Texture*  grave_ok[4];
 	SDL_Texture* grave_des[4];
-
 	SDL_Texture* bonus_tex[4];
 
 	p2List_item<PhysBody*>* flips_start;
