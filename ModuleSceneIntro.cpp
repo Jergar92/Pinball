@@ -91,7 +91,7 @@ bool ModuleSceneIntro::Start()
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 1, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(160, 20, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(155, 25, 15, 0, 1, NULL, HIT_OBJECT));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -104,6 +104,14 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 
 	//ADD GRAVES
+	circles.add(App->physics->CreateCircle(110, 40, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
+	circles.add(App->physics->CreateCircle(200, 40, 15, 0, 1, NULL, GRAVES));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 2, circles.getLast()->data));
+	circles.getLast()->data->listener = this;
+
 	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, GRAVES));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
@@ -151,47 +159,47 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 
 	//
-	circles.add(App->physics->CreateCircleSensor(95, 380, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(103, 382, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(185, 380, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(187, 382, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(140, 425, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(143, 430, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 5, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(140, 485, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 486, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(90, 585, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(94, 585, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(190, 585, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(200, 585, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(115, 610, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(119, 611, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(170, 610, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(174, 611, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(140, 655, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 653, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(140, 685, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 693, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(140, 725, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 729, 10, 0, BONUS));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
