@@ -40,6 +40,8 @@ bool ModuleSceneIntro::Start()
 	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave4.wav");
 	bonusFx= App->audio->LoadFx("pinball/sounds/ding_snd.wav");
 	brainFx= App->audio->LoadFx("pinball/sounds/squish.wav");
+	Game_Over_Laugh = App->audio->LoadFx("pinball/sounds/laugh.wav");
+	EvilLaugh = App->audio->LoadFx("pinball/sounds/evillaugh.wav");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -591,18 +593,20 @@ update_status ModuleSceneIntro::Update()
 	b2Vec2 ballpos = ball->body->GetPosition();
 	if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT+20)
 	{
-		if(myLife>0)
-			myLife--;	
 
+		if (myLife > 0)
+			myLife--;
 
 		if (myLife == 0)
 		{
-
+			myLife--;
+			App->audio->PlayFx(Game_Over_Laugh);
 			App->fade->FadeToBlack(this, this, 4.0);
-
 		}
-		else
+		
+		else if (myLife > 0)
 		{
+			App->audio->PlayFx(EvilLaugh);
 			App->physics->DestroyBody(ball);
 			delete ball;
 			ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);

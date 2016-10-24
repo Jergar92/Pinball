@@ -87,7 +87,7 @@ public:
 	
 	//Score and life values
 	uint myScore;
-	uint myLife;
+	int myLife;
 	uint actualBonus=1;
 	 
 	
@@ -95,6 +95,8 @@ public:
 	uint gravesFx[4];
 	uint bonusFx;
 	uint brainFx;
+	uint EvilLaugh;
+	uint Game_Over_Laugh;
 
 	p2Point<int> ray;
 	bool ray_on;
