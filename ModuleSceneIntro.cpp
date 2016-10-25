@@ -476,6 +476,13 @@ bool ModuleSceneIntro::CleanUp()
 	{
 		App->physics->DestroyBody(it->data->bonusBody);
 	}
+	for (p2List_item<Squeleton*>* it = squeletons.getFirst(); it != nullptr; it = it->next)
+	{
+		App->physics->DestroyBody(it->data->squeletonBody);
+	}
+
+	App->physics->DestroyBody(brain->brainBody);
+
 	listBonus.clear();
 
 
