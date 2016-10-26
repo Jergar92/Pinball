@@ -14,6 +14,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 {
 	background = NULL;
 	ray_on = false;	
+	
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -24,10 +25,11 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
-	actualBonus = 1;
 
+	actualBonus = 1;
 	myScore = 0;
-	myLife = 1;
+	myLife = 3;
+	change_sensor = false;
 
 
 	//LoadMusic
@@ -38,8 +40,10 @@ bool ModuleSceneIntro::Start()
 	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave2.wav");
 	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave3.wav");
 	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave4.wav");
-	bonusFx= App->audio->LoadFx("pinball/sounds/ding_snd.wav");
-	brainFx= App->audio->LoadFx("pinball/sounds/squish.wav");
+	bonusFx = App->audio->LoadFx("pinball/sounds/ding_snd.wav");
+	brainFx = App->audio->LoadFx("pinball/sounds/squish.wav");
+	BellFx = App->audio->LoadFx("pinball/sounds/bell_snd.wav");
+	FlipFx = App->audio->LoadFx("pinball/sounds/impact_shovel.wav");
 	squeletonFx = App->audio->LoadFx("pinball/sounds/squeleton_hit.wav");
 	Game_Over_Laugh = App->audio->LoadFx("pinball/sounds/laugh.wav");
 	EvilLaugh = App->audio->LoadFx("pinball/sounds/evillaugh.wav");
@@ -47,9 +51,10 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	//Load Images
-	background = App->textures->Load("pinball/pinball_back.png");
-	ball_texture = App->textures->Load("pinball/ball.png");
-	left_flip= App->textures->Load("pinball/Sprites/FlipLeft.png");
+	background = App->textures->Load("pinball/Sprites/pinball_back.png");
+	ball_texture = App->textures->Load("pinball/Sprites/ball.png");
+	bell_text = App->textures->Load("pinball/Sprites/Bell.png");
+	left_flip = App->textures->Load("pinball/Sprites/FlipLeft.png");
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 	brain_text = App->textures->Load("pinball/Sprites/brain.png");
 
@@ -81,6 +86,7 @@ bool ModuleSceneIntro::Start()
 	//ADD BALL
 	ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
 	ball->body->IsBullet();
+
 
 	//ADD BRAIN
 	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, brain_text));
@@ -439,6 +445,22 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
 	up_right_flip = circles.getLast()->data;
 	
+
+
+
+	//ADD BELL AND SENSOR
+	boxes.add(App->physics->CreateRectangle(255, 305, 20, 10, 0));
+	bell = boxes.getLast()->data;
+	bell->body->SetTransform(b2Vec2(PIXEL_TO_METERS(255), PIXEL_TO_METERS(305)), DEGTORAD * 45);
+	bell->listener = this;
+	bell->body->SetActive(false);
+
+	boxes.add(App->physics->CreateRectangleSensor(248, 310, 30, 1));
+	bell_sensor = boxes.getLast()->data;
+	bell_sensor->body->SetTransform(b2Vec2(PIXEL_TO_METERS(248), PIXEL_TO_METERS(310)), DEGTORAD * 45);
+	bell_sensor->listener = this;
+
+
 	return ret;
 }
 
@@ -451,7 +473,9 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(left_flip);
 	App->textures->Unload(right_flip);
 	App->textures->Unload(brain_text);
-	
+	App->textures->Unload(bell_text);
+
+
 	for (int i = 0; i < 4; i++)
 	{
 		App->textures->Unload(grave_ok[i]);
@@ -513,7 +537,12 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0);
 	LOG("myScore=%i, myBonus=%i", myScore,actualBonus);
 
-
+	if (change_sensor)
+	{
+		change_sensor = false;
+		bell->body->SetActive(true);
+		bell_sensor->body->SetActive(false);
+	}
 
 	for (p2List_item<PhysBody*>* it = circles.getFirst(); it != nullptr; it = it->next)
 	{
@@ -559,6 +588,8 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(ball->texture, METERS_TO_PIXELS(pos.x - ball->width), METERS_TO_PIXELS(pos.y - ball->height));
 	}
 
+	//Blit Bell
+		App->renderer->Blit(bell_text, 225, 255);
 
 
 	//Blit Graves
@@ -646,29 +677,38 @@ update_status ModuleSceneIntro::Update()
 
 
 	//APPLY FORCES TO FLIPPERS
-
-	low_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
-	low_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
-	mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
-	mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
-	up_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
-	up_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
-
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	{
+		App->audio->PlayFx(FlipFx);
+	}
+	
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
-		up_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
-		low_left_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, -70), true);
+		up_left_flip->body->ApplyForceToCenter(b2Vec2(0, -70), true);
+		low_left_flip->body->ApplyForceToCenter(b2Vec2(0, -70), true);
+	
 	}
+	else
+	{
+		low_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+		mid_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+		up_left_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 
+	}
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
-		up_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
-		low_right_flip->body->ApplyForceToCenter(b2Vec2(0, -60), true);
+		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, -70), true);
+		up_right_flip->body->ApplyForceToCenter(b2Vec2(0, -70), true);
+		low_right_flip->body->ApplyForceToCenter(b2Vec2(0, -70), true);
 
+	}	
+	else
+	{
+		low_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+		mid_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
+		up_right_flip->body->ApplyForceToCenter(b2Vec2(0, 10), true);
 	}
-
 
 
 
@@ -678,6 +718,8 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 ballpos = ball->body->GetPosition();
 		if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT + 20)
 		{
+			bell->body->SetActive(false);
+			bell_sensor->body->SetActive(true);			
 
 			if (myLife > 0)
 				myLife--;
@@ -721,6 +763,20 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		myScore += ToScore(brain->points);
 		return;
 	}
+	        
+
+	if (bell_sensor == bodyA)
+	{
+		change_sensor = true;
+		return;
+	}
+
+	if (bell == bodyA)
+	{
+		App->audio->PlayFx(BellFx);
+		return;
+	}
+
 	for (uint i = 0; i < squeletons.count(); ++i) {
 		p2List_item<Squeleton*>* item = squeletons.getFirst();
 		for (; item != NULL; item = item->next) {

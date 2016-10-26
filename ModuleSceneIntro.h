@@ -86,6 +86,7 @@ public:
 	SDL_Texture* grave_des[4];
 	SDL_Texture* bonus_tex[4];
 	SDL_Texture* brain_text;
+	SDL_Texture* bell_text;
 	SDL_Texture* squeleton_tex[5];
 	p2List_item<PhysBody*>* flips_start;
 	SDL_Texture* bumper_text[2];
@@ -96,8 +97,10 @@ public:
 	PhysBody* mid_right_flip;
 	PhysBody* up_left_flip;
 	PhysBody* up_right_flip;
-
+	PhysBody* bell;
+	PhysBody* bell_sensor;
 	PhysBody* ball;
+
 
 	Brain* brain;
 	p2List<HeadStone*> headstone;
@@ -119,7 +122,8 @@ public:
 	uint gravesFx[4];
 	uint bonusFx;
 	uint brainFx;
-
+	uint BellFx;
+	uint FlipFx;
 	uint EvilLaugh;
 	uint Game_Over_Laugh;
 
@@ -127,4 +131,5 @@ public:
 
 	p2Point<int> ray;
 	bool ray_on;
+	bool change_sensor;
 };
