@@ -124,6 +124,7 @@ public:
 	uint brainFx;
 	uint BellFx;
 	uint FlipFx;
+	uint bumperFx;
 	uint EvilLaugh;
 	uint Game_Over_Laugh;
 

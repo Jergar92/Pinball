@@ -44,6 +44,7 @@ bool ModuleSceneIntro::Start()
 	brainFx = App->audio->LoadFx("pinball/sounds/squish.wav");
 	BellFx = App->audio->LoadFx("pinball/sounds/bell_snd.wav");
 	FlipFx = App->audio->LoadFx("pinball/sounds/impact_shovel.wav");
+	bumperFx = App->audio->LoadFx("pinball/sounds/brainHit.wav");
 	squeletonFx = App->audio->LoadFx("pinball/sounds/squeleton_hit.wav");
 	Game_Over_Laugh = App->audio->LoadFx("pinball/sounds/laugh.wav");
 	EvilLaugh = App->audio->LoadFx("pinball/sounds/evillaugh.wav");
@@ -214,18 +215,36 @@ bool ModuleSceneIntro::Start()
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 	//
-	int bumper_left[10] = { 
-		75, 750,
-		88, 755,
-		93, 753,
-		92, 780,
-		88, 785,
-	 };
-	chains.add(App->physics->CreateChain(175, 740, bumper_left,10,0));
-	bumpers.add(new Bumper(this,5, bonusFx,0,chains.getLast()->data));
+
+
+	int bumper_left[16] = {
+		63, 761,
+		67, 773,
+		75, 781,
+		86, 783,
+		92, 775,
+		90, 763,
+		81, 754,
+		68, 754
+	};
+	int bumper_right[16] = {
+		207, 780,
+		196, 776,
+		193, 766,
+		201, 755,
+		215, 751,
+		223, 757,
+		221, 769,
+		213, 777
+	};
+
+	
+	chains.add(App->physics->CreateChain(0, 0, bumper_right,16,0));
+	bumpers.add(new Bumper(this,5, bumperFx,0,chains.getLast()->data));
 	chains.getLast()->data->listener = this;
-	chains.add(App->physics->CreateChain(58, 740, bumper_left, 10, 0));
-	bumpers.add(new Bumper(this, 5, bonusFx, 1, chains.getLast()->data));
+	
+	chains.add(App->physics->CreateChain(0, 0, bumper_left, 16, 0));
+	bumpers.add(new Bumper(this, 5, bumperFx, 1, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 	// Pivot 0, 0
 	int pinball_exterior[184] = {
@@ -517,15 +536,20 @@ bool ModuleSceneIntro::CleanUp()
 	{
 		App->physics->DestroyBody(it->data->bonusBody);
 	}
+	listBonus.clear();
 
 	for (p2List_item<Squeleton*>* it = squeletons.getFirst(); it != nullptr; it = it->next)
 	{
 		App->physics->DestroyBody(it->data->squeletonBody);
 	}
-
+	squeletons.clear();
+	for (p2List_item<Bumper*>* it = bumpers.getFirst(); it != nullptr; it = it->next)
+	{
+		App->physics->DestroyBody(it->data->bumperBody);
+	}
+	bumpers.clear();
 	App->physics->DestroyBody(brain->brainBody);
 
-	listBonus.clear();
 
 
 	return true;
@@ -574,9 +598,8 @@ update_status ModuleSceneIntro::Update()
 
 		if (it->data->bumperBody->body == nullptr)
 			continue;
-
 		b2Vec2 pos = it->data->bumperBody->body->GetPosition();
-		App->renderer->Blit(bumper_text[it->data->number], METERS_TO_PIXELS(pos.x - it->data->bumperBody->width), METERS_TO_PIXELS(pos.y - it->data->bumperBody->height));
+		App->renderer->Blit(bumper_text[it->data->number], METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y));
 
 	}
 
@@ -775,6 +798,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		App->audio->PlayFx(BellFx);
 		return;
+	}
+	for (uint i = 0; i < bumpers.count(); ++i) {
+		p2List_item<Bumper*>* item = bumpers.getFirst();
+		for (; item != NULL; item = item->next) {
+			if (item->data->bumperBody == bodyA) {
+				App->audio->PlayFx(item->data->fx);
+				myScore += ToScore(item->data->points);
+				return;
+			}
+		}
 	}
 
 	for (uint i = 0; i < squeletons.count(); ++i) {
