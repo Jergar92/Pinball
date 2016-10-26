@@ -57,7 +57,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, float restitution, SDL_Texture* text, bodyType myType)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, float restitution, SDL_Texture* text)
 {
 	b2BodyDef body;
 	switch (type)
@@ -91,12 +91,11 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int type, float 
 	pbody->width = pbody->height = radius;
 
 	pbody->texture = text;
-	pbody->myBodyType = myType;
 
 
 	return pbody;
 }
-PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, int type, bodyType myType)
+PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, int type)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -118,12 +117,11 @@ PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, int type, 
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
-	pbody->myBodyType = myType;
 
 
 	return pbody;
 }
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text, bodyType myType)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, int type, SDL_Texture* text)
 {
 	b2BodyDef body;
 	switch (type)
@@ -156,11 +154,10 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, in
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 	pbody->texture = text;
-	pbody->myBodyType = myType;
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, bodyType myType)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -183,13 +180,12 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
-	pbody->myBodyType = myType;
 
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text, bodyType myType)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text)
 {
 	b2BodyDef body;
 	switch (type)
@@ -231,7 +227,6 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int ty
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
-	pbody->myBodyType = myType;
 
 	return pbody;
 }

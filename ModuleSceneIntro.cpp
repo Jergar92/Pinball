@@ -79,128 +79,128 @@ bool ModuleSceneIntro::Start()
 	ball->body->IsBullet();
 
 	//ADD BRAIN
-	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, brain_text, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, brain_text));
 	brain = new Brain(this, 10, brainFx, circles.getLast()->data);
 	circles.getLast()->data->listener = this;
 
 	//ADD SQUELETONS
-	circles.add(App->physics->CreateCircle(20, 90, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(20, 90, 15, 0, 1, NULL));
 	squeletons.add(new Squeleton(this, 8, squeletonFx,0, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(60, 55, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(60, 55, 15, 0, 1, NULL));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 1, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(155, 25, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(155, 25, 15, 0, 1, NULL));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(250, 50, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(250, 50, 15, 0, 1, NULL));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(300, 90, 15, 0, 1, NULL, HIT_OBJECT));
+	circles.add(App->physics->CreateCircle(300, 90, 15, 0, 1, NULL));
 	squeletons.add(new Squeleton(this, 8, squeletonFx, 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//ADD GRAVES
-	circles.add(App->physics->CreateCircle(110, 40, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(110, 40, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(200, 40, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(200, 40, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//////
-	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(40, 684, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(40, 684, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
-	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(250, 680, 15, 0, 1, NULL, GRAVES));
+	circles.add(App->physics->CreateCircle(250, 680, 15, 0, 1, NULL));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[0], 1, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 	//
-	circles.add(App->physics->CreateCircleSensor(103, 382, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(103, 382, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(187, 382, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(187, 382, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(143, 430, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(143, 430, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 5, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(144, 486, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 486, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(94, 587, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(94, 587, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(200, 587, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(200, 587, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(119, 613, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(119, 613, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(174, 613, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(174, 613, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(144, 653, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 653, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(144, 693, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 693, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircleSensor(144, 729, 10, 0, BONUS));
+	circles.add(App->physics->CreateCircleSensor(144, 729, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -376,7 +376,7 @@ bool ModuleSceneIntro::Start()
 
 		//BOTTOM LEFT
 	circles.add(App->physics->CreateCircle(88, 816, 6, 0));
-	boxes.add(App->physics->CreateRectangle(88 + 25, 816, 50, 12, 1, left_flip, FLIP));
+	boxes.add(App->physics->CreateRectangle(88 + 25, 816, 50, 12, 1, left_flip));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(88 + 25, 836, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
@@ -384,7 +384,7 @@ bool ModuleSceneIntro::Start()
 
      	//BOTTOM RIGHT
 	circles.add(App->physics->CreateCircle(205, 814, 6, 0));
-	boxes.add(App->physics->CreateRectangle(205 - 25, 814, 50, 12, 1, right_flip, FLIP));
+	boxes.add(App->physics->CreateRectangle(205 - 25, 814, 50, 12, 1, right_flip));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(205 - 25, 834, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
@@ -392,7 +392,7 @@ bool ModuleSceneIntro::Start()
 
 		//MID LEFT
 	circles.add(App->physics->CreateCircle(85, 530, 6, 0));
-	boxes.add(App->physics->CreateRectangle(85+25, 530, 50, 12, 1, left_flip, FLIP));
+	boxes.add(App->physics->CreateRectangle(85+25, 530, 50, 12, 1, left_flip));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(85+25, 550, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
@@ -400,7 +400,7 @@ bool ModuleSceneIntro::Start()
 
 		//MID RIGHT
 	circles.add(App->physics->CreateCircle(209, 529, 6, 0));
-	boxes.add(App->physics->CreateRectangle(209 - 25, 529, 50, 12, 1, right_flip, FLIP));
+	boxes.add(App->physics->CreateRectangle(209 - 25, 529, 50, 12, 1, right_flip));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(209 -25, 529, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));
@@ -408,7 +408,7 @@ bool ModuleSceneIntro::Start()
 	
 	//UP LEFT
 	circles.add(App->physics->CreateCircle(100, 250, 6, 0));
-	boxes.add(App->physics->CreateRectangle(100 + 25, 250, 50, 12, 1, left_flip, FLIP));
+	boxes.add(App->physics->CreateRectangle(100 + 25, 250, 50, 12, 1, left_flip));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(100 + 25, 270, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0));
@@ -416,7 +416,7 @@ bool ModuleSceneIntro::Start()
 
 	//UP RIGHT
 	circles.add(App->physics->CreateCircle(220, 250, 6, 0));
-	boxes.add(App->physics->CreateRectangle(220 - 25, 250, 50, 12, 1, right_flip, FLIP));
+	boxes.add(App->physics->CreateRectangle(220 - 25, 250, 50, 12, 1, right_flip));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(0.5, 0), p2Point<float>(0, 0), 0, 25, -20);
 	circles.add(App->physics->CreateCircle(220 - 25, 270, 6, 1));
 	App->physics->CreateRevolutionJoint(boxes.getLast()->data->body, circles.getLast()->data->body, p2Point<float>(-0.5, 0), p2Point<float>(0, 0));

@@ -19,15 +19,6 @@ enum update_status
 	UPDATE_STOP,
 	UPDATE_ERROR
 };
-enum bodyType
-{
-	FLIP,
-	HIT_OBJECT,
-	GRAVES,
-	BONUS,
-	CHAIN,
-	NONE
-};
 // Configuration -----------
 #define SCREEN_WIDTH 326
 #define SCREEN_HEIGHT 850
