@@ -52,6 +52,7 @@ bool ModuleSceneIntro::Start()
 	left_flip= App->textures->Load("pinball/Sprites/FlipLeft.png");
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 	brain_text = App->textures->Load("pinball/Sprites/brain.png");
+
 	for (int i = 0; i < 4; i++)
 	{
 		p2SString tmp1("pinball/Sprites/Grave_%i_Ok.png", i+1);
@@ -73,7 +74,10 @@ bool ModuleSceneIntro::Start()
 		p2SString tmp("pinball/Sprites/Squeleton_%i.png", i);
 		squeleton_tex[i] = App->textures->Load(tmp.GetString());
 	}
-
+	i = 0;
+	bumper_text[i++]= App->textures->Load("pinball/Sprites/brainbot_l.png");
+	bumper_text[i++] = App->textures->Load("pinball/Sprites/brainbot_r.png");
+	
 	//ADD BALL
 	ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
 	ball->body->IsBullet();
@@ -203,7 +207,20 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircleSensor(144, 729, 10, 0));
 	listBonus.add(new Bonus(this, bonusFx, 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
-
+	//
+	int bumper_left[10] = { 
+		75, 750,
+		88, 755,
+		93, 753,
+		92, 780,
+		88, 785,
+	 };
+	chains.add(App->physics->CreateChain(175, 740, bumper_left,10,0));
+	bumpers.add(new Bumper(this,5, bonusFx,0,chains.getLast()->data));
+	chains.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(58, 740, bumper_left, 10, 0));
+	bumpers.add(new Bumper(this, 5, bonusFx, 1, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 	// Pivot 0, 0
 	int pinball_exterior[184] = {
 		162, 23,
@@ -523,6 +540,16 @@ update_status ModuleSceneIntro::Update()
 		}
 
 	}
+	//Blit Bumpers
+	for (p2List_item<Bumper*>* it = bumpers.getFirst(); it != nullptr; it = it->next) {
+
+		if (it->data->bumperBody->body == nullptr)
+			continue;
+
+		b2Vec2 pos = it->data->bumperBody->body->GetPosition();
+		App->renderer->Blit(bumper_text[it->data->number], METERS_TO_PIXELS(pos.x - it->data->bumperBody->width), METERS_TO_PIXELS(pos.y - it->data->bumperBody->height));
+
+	}
 
 
 	//Blit Ball
@@ -756,5 +783,10 @@ Squeleton::Squeleton(ModuleSceneIntro * scene, uint points, uint fx, int number,
 	points(points), fx(fx),number(number), squeletonBody(squeletonBody)
 {
 }
+Bumper::Bumper(ModuleSceneIntro * scene, uint points, uint fx, int number, PhysBody * bumperBody) :
+	points(points), fx(fx), number(number),bumperBody(bumperBody)
+{
+}
+
 
 

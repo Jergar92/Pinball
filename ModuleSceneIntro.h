@@ -38,6 +38,16 @@ struct Squeleton
 	uint points;
 	uint fx;
 };
+struct Bumper
+{
+
+	Bumper(ModuleSceneIntro* scene, uint points, uint fx, int bumpernumber, PhysBody* bumperBody);
+
+	int number;
+	PhysBody* bumperBody;
+	uint points;
+	uint fx;
+};
 struct Bonus {
 
 	Bonus(ModuleSceneIntro* scene,uint fx, int bonusnumber, PhysBody* bonusBody);
@@ -78,6 +88,7 @@ public:
 	SDL_Texture* brain_text;
 	SDL_Texture* squeleton_tex[5];
 	p2List_item<PhysBody*>* flips_start;
+	SDL_Texture* bumper_text[2];
 
 	PhysBody* low_left_flip;
 	PhysBody* low_right_flip;
@@ -90,7 +101,9 @@ public:
 
 	Brain* brain;
 	p2List<HeadStone*> headstone;
+	p2List<Bumper*> bumpers;
 	p2List<Bonus*> listBonus;
+
 	p2List<Squeleton*> squeletons;
 
 	//Score functions
