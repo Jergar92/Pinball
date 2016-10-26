@@ -27,7 +27,7 @@ bool ModuleSceneIntro::Start()
 	actualBonus = 1;
 
 	myScore = 0;
-	myLife = 3;
+	myLife = 1;
 
 
 	//LoadMusic
@@ -553,9 +553,11 @@ update_status ModuleSceneIntro::Update()
 
 
 	//Blit Ball
-	{		b2Vec2 pos =ball->body->GetPosition();
-	
-	App->renderer->Blit(ball->texture, METERS_TO_PIXELS(pos.x - ball->width), METERS_TO_PIXELS(pos.y - ball->height)); }
+	if(ball!=nullptr)
+	{	
+		b2Vec2 pos =ball->body->GetPosition();
+		App->renderer->Blit(ball->texture, METERS_TO_PIXELS(pos.x - ball->width), METERS_TO_PIXELS(pos.y - ball->height));
+	}
 
 
 
@@ -671,29 +673,33 @@ update_status ModuleSceneIntro::Update()
 
 
 	//CHECK IF BALL IS UNDER THRESHOLD
-	b2Vec2 ballpos = ball->body->GetPosition();
-	if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT+20)
+	if (ball != nullptr)
 	{
-
-		if (myLife > 0)
-			myLife--;
-
-		if (myLife == 0)
+		b2Vec2 ballpos = ball->body->GetPosition();
+		if (METERS_TO_PIXELS(ballpos.y) > SCREEN_HEIGHT + 20)
 		{
-			myLife--;
-			App->audio->PlayFx(Game_Over_Laugh);
-			App->fade->FadeToBlack(this, this, 4.0);
+
+			if (myLife > 0)
+				myLife--;
+
+			if (myLife == 0)
+			{
+				App->audio->PlayFx(Game_Over_Laugh);
+				App->fade->FadeToBlack(this, this, 6.0);
+				App->physics->DestroyBody(ball);
+				ball = nullptr;
+			}
+
+			else if (myLife > 0)
+			{
+				App->audio->PlayFx(EvilLaugh);
+				App->physics->DestroyBody(ball);
+				ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
+			}
+
 		}
-		
-		else if (myLife > 0)
-		{
-			App->audio->PlayFx(EvilLaugh);
-			App->physics->DestroyBody(ball);
-			delete ball;
-			ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
-		}
-			
 	}
+
 
 
 	//BLIT SCORE AND LIFES
