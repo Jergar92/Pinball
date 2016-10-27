@@ -21,9 +21,9 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
-	bounc = App->textures->Load("pinball/Sprites/Bumper.png");
+	bounc = App->textures->Load("Game/Sprites/Bumper.png");
 
-	bouncerFx = App->audio->LoadFx("pinball/sounds/charge.wav");
+	bouncerFx = App->audio->LoadFx("Game/sounds/charge.wav");
 	bouncer = App->physics->CreateRectangle(305, 840, 18, 18, 1, bounc);
 	bouncerWheel = App->physics->CreateRectangle(305, 840, 10, 0, 0);
 	App->physics->CreateLineJoint(bouncer->body, bouncerWheel->body, p2Point<float>(0, 0), p2Point<float>(0, 0), 30.0f, 0.0f);

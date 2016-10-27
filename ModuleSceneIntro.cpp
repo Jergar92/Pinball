@@ -34,36 +34,36 @@ bool ModuleSceneIntro::Start()
 
 	//LoadMusic
 
-	App->audio->PlayMusic("pinball/sounds/game_music.ogg", 0.0f);
+	App->audio->PlayMusic("Game/sounds/game_music.ogg", 0.0f);
 	int i = 0;
-	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave1.wav");
-	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave2.wav");
-	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave3.wav");
-	gravesFx[i++] = App->audio->LoadFx("pinball/sounds/grave4.wav");
-	bonusFx = App->audio->LoadFx("pinball/sounds/ding_snd.wav");
-	brainFx = App->audio->LoadFx("pinball/sounds/squish.wav");
-	BellFx = App->audio->LoadFx("pinball/sounds/bell_snd.wav");
-	FlipFx = App->audio->LoadFx("pinball/sounds/impact_shovel.wav");
-	bumperFx = App->audio->LoadFx("pinball/sounds/brainHit.wav");
-	squeletonFx = App->audio->LoadFx("pinball/sounds/squeleton_hit.wav");
-	Game_Over_Laugh = App->audio->LoadFx("pinball/sounds/laugh.wav");
-	EvilLaugh = App->audio->LoadFx("pinball/sounds/evillaugh.wav");
+	gravesFx[i++] = App->audio->LoadFx("Game/sounds/grave1.wav");
+	gravesFx[i++] = App->audio->LoadFx("Game/sounds/grave2.wav");
+	gravesFx[i++] = App->audio->LoadFx("Game/sounds/grave3.wav");
+	gravesFx[i++] = App->audio->LoadFx("Game/sounds/grave4.wav");
+	bonusFx = App->audio->LoadFx("Game/sounds/ding_snd.wav");
+	brainFx = App->audio->LoadFx("Game/sounds/squish.wav");
+	BellFx = App->audio->LoadFx("Game/sounds/bell_snd.wav");
+	FlipFx = App->audio->LoadFx("Game/sounds/impact_shovel.wav");
+	bumperFx = App->audio->LoadFx("Game/sounds/brainHit.wav");
+	squeletonFx = App->audio->LoadFx("Game/sounds/squeleton_hit.wav");
+	Game_Over_Laugh = App->audio->LoadFx("Game/sounds/laugh.wav");
+	EvilLaugh = App->audio->LoadFx("Game/sounds/evillaugh.wav");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	//Load Images
-	background = App->textures->Load("pinball/Sprites/pinball_back.png");
-	ball_texture = App->textures->Load("pinball/Sprites/ball.png");
-	bell_text = App->textures->Load("pinball/Sprites/Bell.png");
-	left_flip = App->textures->Load("pinball/Sprites/FlipLeft.png");
-	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
-	brain_text = App->textures->Load("pinball/Sprites/brain.png");
-	game_over_text= App->textures->Load("pinball/Sprites/game_over.png");
+	background = App->textures->Load("Game/Sprites/pinball_back.png");
+	ball_texture = App->textures->Load("Game/Sprites/ball.png");
+	bell_text = App->textures->Load("Game/Sprites/Bell.png");
+	left_flip = App->textures->Load("Game/Sprites/FlipLeft.png");
+	right_flip = App->textures->Load("Game/Sprites/FlipRight.png");
+	brain_text = App->textures->Load("Game/Sprites/brain.png");
+	game_over_text= App->textures->Load("Game/Sprites/game_over.png");
 
 	for (int i = 0; i < 4; i++)
 	{
-		p2SString tmp1("pinball/Sprites/Grave_%i_Ok.png", i+1);
-		p2SString tmp2("pinball/Sprites/Grave_%i_Des.png", i+1);
+		p2SString tmp1("Game/Sprites/Grave_%i_Ok.png", i+1);
+		p2SString tmp2("Game/Sprites/Grave_%i_Des.png", i+1);
 
 		grave_ok[i] = App->textures->Load(tmp1.GetString());
 		grave_des[i] = App->textures->Load(tmp2.GetString());
@@ -72,18 +72,18 @@ bool ModuleSceneIntro::Start()
 	for (int i = 0; i < 4; i++)
 	{
 
-		p2SString tmp("pinball/Sprites/x%i.png", i + 2);
+		p2SString tmp("Game/Sprites/x%i.png", i + 2);
 		bonus_tex[i] = App->textures->Load(tmp.GetString());
 	}
 	for (int i = 0; i < 5; i++)
 	{
 		//0 look east 1 look south-east 2 look south 3 look south-west 4 look west
-		p2SString tmp("pinball/Sprites/Squeleton_%i.png", i);
+		p2SString tmp("Game/Sprites/Squeleton_%i.png", i);
 		squeleton_tex[i] = App->textures->Load(tmp.GetString());
 	}
 	i = 0;
-	bumper_text[i++]= App->textures->Load("pinball/Sprites/brainbot_l.png");
-	bumper_text[i++] = App->textures->Load("pinball/Sprites/brainbot_r.png");
+	bumper_text[i++]= App->textures->Load("Game/Sprites/brainbot_l.png");
+	bumper_text[i++] = App->textures->Load("Game/Sprites/brainbot_r.png");
 	
 
 	//ADD BALL
