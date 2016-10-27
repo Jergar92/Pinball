@@ -244,33 +244,36 @@ bool ModuleSceneIntro::Start()
 	//
 
 
-	int bumper_left[16] = {
-		63, 761,
-		67, 773,
-		75, 781,
-		86, 783,
-		92, 775,
-		90, 763,
-		81, 754,
-		68, 754
+	int bumper_left[18] = {
+		12, 32,
+		21, 38,
+		29, 38,
+		38, 34,
+		44, 25,
+		42, 15,
+		33, 10,
+		22, 13,
+		17, 21
 	};
-	int bumper_right[16] = {
-		207, 780,
-		196, 776,
-		193, 766,
-		201, 755,
-		215, 751,
-		223, 757,
-		221, 769,
-		213, 777
+	int bumper_right[18] = {
+		47, 31,
+		40, 39,
+		38, 38,
+		25, 37,
+		15, 28,
+		14, 18,
+		22, 11,
+		34, 12,
+		41, 19
 	};
 
+
 	
-	chains.add(App->physics->CreateChain(0, 0, bumper_right,16,0));
+	chains.add(App->physics->CreateChain(180, 740, bumper_left,18,0, 3.0f));
 	bumpers.add(new Bumper(this,5, bumperFx,0,chains.getLast()->data));
-	chains.getLast()->data->listener = this;
+	chains.getLast()->data->listener = this; 
 	
-	chains.add(App->physics->CreateChain(0, 0, bumper_left, 16, 0));
+	chains.add(App->physics->CreateChain(50, 740, bumper_right, 18, 0,3.0f));
 	bumpers.add(new Bumper(this, 5, bumperFx, 1, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 	// Pivot 0, 0

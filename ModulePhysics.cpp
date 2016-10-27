@@ -185,7 +185,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int type, SDL_Texture* text)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int type, float restitution, SDL_Texture* text)
 {
 	b2BodyDef body;
 	switch (type)
