@@ -116,59 +116,86 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 
 	//ADD GRAVES
-	circles.add(App->physics->CreateCircle(110, 40, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(200, 40, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 2, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(83, 355, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	int grave_1_chain[10] = { 28, 27,
+		28, 17,
+		4, 14,
+		2, 25,
+		23, 26 };
 
-	circles.add(App->physics->CreateCircle(78, 408, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	int grave_2_chain[10] = { 1, 27,
+		9, 20,
+		33, 33,
+		24, 40,
+		4, 29 };
 
-	circles.add(App->physics->CreateCircle(146, 385, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	int grave_3_chain[10] = { 1, 17,
+		24, 16,
+		29, 24,
+		0, 27,
+		-1, 20 };
 
-	circles.add(App->physics->CreateCircle(202, 408, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	int grave_4_chain[12] = {-1, 36,
+	4, 42,
+	31, 32,
+	29, 26,
+	22, 24,
+	0, 31};
 
-	circles.add(App->physics->CreateCircle(235, 390, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(100,10, grave_4_chain, 12, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
+
+	chains.add(App->physics->CreateChain(200, 40, grave_2_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 2, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
+
+	chains.add(App->physics->CreateChain(83, 355, grave_4_chain, 12, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
+
+	chains.add(App->physics->CreateChain(78, 408, grave_4_chain, 12, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
+
+	chains.add(App->physics->CreateChain(146, 385, grave_3_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
+
+	chains.add(App->physics->CreateChain(202, 408, grave_2_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
+
+	chains.add(App->physics->CreateChain(235, 390, grave_2_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 
 	//////
-	circles.add(App->physics->CreateCircle(27, 610, 15, 0, 1, NULL));
+	circles.add(App->physics->CreateChain(27, 610, grave_4_chain, 12, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(98, 640, 15, 0, 1, NULL));
+	circles.add(App->physics->CreateChain(98, 640, grave_3_chain, 10, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(240, 607, 15, 0, 1, NULL));
+	circles.add(App->physics->CreateChain(240, 607, grave_2_chain, 10, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(40, 684, 15, 0, 1, NULL));
+	circles.add(App->physics->CreateChain(40, 684, grave_4_chain, 12, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
-	circles.add(App->physics->CreateCircle(207, 653, 15, 0, 1, NULL));
+	circles.add(App->physics->CreateChain(207, 653, grave_2_chain, 10, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateCircle(250, 680, 15, 0, 1, NULL));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[0], 1, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(250, 680, grave_1_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[0], 1, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 
 	//
 	circles.add(App->physics->CreateCircleSensor(103, 382, 10, 0));
@@ -624,11 +651,11 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->stoneBody->body->GetPosition();
 		
 		if (it->data->life > 6) {
-			App->renderer->Blit(grave_ok[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
+			App->renderer->Blit(grave_ok[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height));
 		}
 		else if (it->data->life > 0)
 		{
-			App->renderer->Blit(grave_des[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height - 5));
+			App->renderer->Blit(grave_des[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height));
 		}
 		else if (it->data->life == 0)
 		{
