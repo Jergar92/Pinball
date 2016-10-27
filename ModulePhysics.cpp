@@ -218,6 +218,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int ty
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	fixture.restitution = restitution;
 
 	b->CreateFixture(&fixture);
 
