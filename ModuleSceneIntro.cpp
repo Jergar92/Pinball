@@ -58,6 +58,7 @@ bool ModuleSceneIntro::Start()
 	left_flip = App->textures->Load("pinball/Sprites/FlipLeft.png");
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 	brain_text = App->textures->Load("pinball/Sprites/brain.png");
+	game_over_text= App->textures->Load("pinball/Sprites/game_over.png");
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -172,26 +173,26 @@ bool ModuleSceneIntro::Start()
 	chains.getLast()->data->listener = this;
 
 	//////
-	circles.add(App->physics->CreateChain(27, 610, grave_4_chain, 12, 0));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(27, 610, grave_4_chain, 12, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(98, 640, grave_3_chain, 10, 0));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(98, 640, grave_3_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(240, 607, grave_2_chain, 10, 0));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(240, 607, grave_2_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(40, 684, grave_4_chain, 12, 0));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(40, 684, grave_4_chain, 12, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 
 
-	circles.add(App->physics->CreateChain(207, 653, grave_2_chain, 10, 0));
-	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(207, 653, grave_2_chain, 10, 0));
+	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, chains.getLast()->data));
+	chains.getLast()->data->listener = this;
 
 	chains.add(App->physics->CreateChain(250, 680, grave_1_chain, 10, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[0], 1, chains.getLast()->data));
@@ -504,7 +505,7 @@ bool ModuleSceneIntro::Start()
 	bell->listener = this;
 	bell->body->SetActive(false);
 
-	boxes.add(App->physics->CreateRectangleSensor(248, 310, 30, 1));
+	boxes.add(App->physics->CreateRectangleSensor(248, 310, 30, 10));
 	bell_sensor = boxes.getLast()->data;
 	bell_sensor->body->SetTransform(b2Vec2(PIXEL_TO_METERS(248), PIXEL_TO_METERS(310)), DEGTORAD * 45);
 	bell_sensor->listener = this;
@@ -523,7 +524,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(right_flip);
 	App->textures->Unload(brain_text);
 	App->textures->Unload(bell_text);
-
+	App->textures->Unload(game_over_text);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -660,7 +661,7 @@ update_status ModuleSceneIntro::Update()
 		{
 			App->renderer->Blit(grave_des[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height));
 		}
-		else if (it->data->life == 0)
+		else if (it->data->life <= 0)
 		{
 			App->physics->DestroyBody(it->data->stoneBody);
 		}
@@ -797,11 +798,15 @@ update_status ModuleSceneIntro::Update()
 
 
 
-	//BLIT SCORE AND LIFES
+	//BLIT SCORE,LIFES AND GAME_OVER SCREEN;
 	p2SString title("Zomball Score: %i Balls: %i", myScore, myLife);
 
 	App->window->SetTitle(title.GetString());
 
+	if (myLife == 0)
+	{
+		App->renderer->Blit(game_over_text, 15, 325);
+	}
 
 
 	return UPDATE_CONTINUE;
@@ -821,6 +826,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bell_sensor == bodyA)
 	{
 		change_sensor = true;
+		App->audio->PlayFx(BellFx);
 		return;
 	}
 
