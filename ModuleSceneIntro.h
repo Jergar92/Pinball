@@ -88,6 +88,7 @@ public:
 	SDL_Texture* brain_text;
 	SDL_Texture* bell_text;
 	SDL_Texture* squeleton_tex[5];
+	SDL_Texture* game_over_text;
 	p2List_item<PhysBody*>* flips_start;
 	SDL_Texture* bumper_text[2];
 

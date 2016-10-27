@@ -58,6 +58,7 @@ bool ModuleSceneIntro::Start()
 	left_flip = App->textures->Load("pinball/Sprites/FlipLeft.png");
 	right_flip = App->textures->Load("pinball/Sprites/FlipRight.png");
 	brain_text = App->textures->Load("pinball/Sprites/brain.png");
+	game_over_text= App->textures->Load("pinball/Sprites/game_over.png");
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -84,15 +85,30 @@ bool ModuleSceneIntro::Start()
 	bumper_text[i++]= App->textures->Load("pinball/Sprites/brainbot_l.png");
 	bumper_text[i++] = App->textures->Load("pinball/Sprites/brainbot_r.png");
 	
+
 	//ADD BALL
 	ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
 	ball->body->SetBullet(true);
 
-
+	int brain_cords[26] = {
+		78, 63,
+		92, 59,
+		104, 45,
+		101, 23,
+		82, 9,
+		57, 0,
+		28, 1,
+		8, 14,
+		0, 29,
+		0, 44,
+		15, 60,
+		45, 72,
+		71, 69
+	};
 	//ADD BRAIN
-	circles.add(App->physics->CreateCircle(0, 390, 35, 0, 1, brain_text));
-	brain = new Brain(this, 10, brainFx, circles.getLast()->data);
-	circles.getLast()->data->listener = this;
+	chains.add(App->physics->CreateChain(-70, 360, brain_cords, 26, 0, 1.0f));
+	brain = new Brain(this, 10, brainFx, chains.getLast()->data);
+	chains.getLast()->data->listener = this;
 
 	//ADD SQUELETONS
 	circles.add(App->physics->CreateCircle(20, 90, 15, 0, 1, NULL));
@@ -177,7 +193,7 @@ bool ModuleSceneIntro::Start()
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(98, 640, grave_3_chain, 10, 0, 1.0f));
+	circles.add(App->physics->CreateChain(90, 640, grave_3_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -185,7 +201,7 @@ bool ModuleSceneIntro::Start()
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(45, 680, grave_4_chain, 12, 0, 1.0f));
+	circles.add(App->physics->CreateChain(42, 670, grave_4_chain, 12, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
@@ -194,7 +210,8 @@ bool ModuleSceneIntro::Start()
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(230, 680, grave_1_chain, 10, 0, 1.0f));
+
+	chains.add(App->physics->CreateChain(240, 680, grave_1_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[0], 1, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
@@ -244,6 +261,7 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->listener = this;
 	//
 
+	//SET Bouncers
 
 	int bumper_left[18] = {
 		12, 32,
@@ -268,13 +286,12 @@ bool ModuleSceneIntro::Start()
 		41, 19
 	};
 
-
 	
-	chains.add(App->physics->CreateChain(175, 740, bumper_left,18,0, 1.3f));
+	chains.add(App->physics->CreateChain(170, 740, bumper_left,18,0, 1.3f));
 	bumpers.add(new Bumper(this,5, bumperFx,0,chains.getLast()->data));
 	chains.getLast()->data->listener = this; 
 	
-	chains.add(App->physics->CreateChain(55, 740, bumper_right, 18, 0, 1.3f));
+	chains.add(App->physics->CreateChain(60, 740, bumper_right, 18, 0, 1.3f));
 	bumpers.add(new Bumper(this, 5, bumperFx, 1, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 	// Pivot 0, 0
@@ -388,7 +405,7 @@ bool ModuleSceneIntro::Start()
 		49, 495,
 		66, 513,
 		81, 519,
-		84, 524,
+		80, 524,
 		81, 530,
 		74, 536,
 		62, 530,
@@ -412,8 +429,8 @@ bool ModuleSceneIntro::Start()
 	int flip_4[24] = { 49, 769,
 		56, 786,
 		71, 798,
-		83, 804,
-		90, 811,
+		80, 804,
+		85, 805,
 		84, 821,
 		69, 820,
 		50, 809,
@@ -431,8 +448,8 @@ bool ModuleSceneIntro::Start()
 		238, 774,
 		230, 789,
 		217, 799,
-		202, 805,
-		204, 814,
+		210, 805,
+		214, 814,
 		214, 821 };
 
 
@@ -505,7 +522,7 @@ bool ModuleSceneIntro::Start()
 	bell->listener = this;
 	bell->body->SetActive(false);
 
-	boxes.add(App->physics->CreateRectangleSensor(248, 310, 30, 1));
+	boxes.add(App->physics->CreateRectangleSensor(248, 310, 30, 10));
 	bell_sensor = boxes.getLast()->data;
 	bell_sensor->body->SetTransform(b2Vec2(PIXEL_TO_METERS(248), PIXEL_TO_METERS(310)), DEGTORAD * 45);
 	bell_sensor->listener = this;
@@ -524,7 +541,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(right_flip);
 	App->textures->Unload(brain_text);
 	App->textures->Unload(bell_text);
-
+	App->textures->Unload(game_over_text);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -590,7 +607,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(background, 0, 0);
-	LOG("myScore=%i, myBonus=%i", myScore,actualBonus);
+//	LOG("myScore=%i, myBonus=%i", myScore,actualBonus);
 
 	if (change_sensor)
 	{
@@ -609,8 +626,9 @@ update_status ModuleSceneIntro::Update()
 		b2Vec2 pos = it->data->body->GetPosition();
 		App->renderer->Blit(it->data->texture, METERS_TO_PIXELS(pos.x - it->data->width), METERS_TO_PIXELS(pos.y - it->data->height));
 	}
-
-
+	//Blit brain
+	b2Vec2 brainpos = brain->brainBody->body->GetPosition();
+	App->renderer->Blit(brain_text, METERS_TO_PIXELS(brainpos.x- brain->brainBody->width), METERS_TO_PIXELS(brainpos.y - brain->brainBody->height));
 	//Blit Bonus
 	for (p2List_item<Bonus*>* it = listBonus.getFirst(); it != nullptr; it = it->next) {
 
@@ -661,7 +679,7 @@ update_status ModuleSceneIntro::Update()
 		{
 			App->renderer->Blit(grave_des[it->data->number-1], METERS_TO_PIXELS(pos.x - it->data->stoneBody->width), METERS_TO_PIXELS(pos.y - it->data->stoneBody->height));
 		}
-		else if (it->data->life == 0)
+		else if (it->data->life <= 0)
 		{
 			App->physics->DestroyBody(it->data->stoneBody);
 		}
@@ -798,11 +816,15 @@ update_status ModuleSceneIntro::Update()
 
 
 
-	//BLIT SCORE AND LIFES
+	//BLIT SCORE,LIFES AND GAME_OVER SCREEN;
 	p2SString title("Zomball Score: %i Balls: %i", myScore, myLife);
 
 	App->window->SetTitle(title.GetString());
 
+	if (myLife == 0)
+	{
+		App->renderer->Blit(game_over_text, 15, 325);
+	}
 
 
 	return UPDATE_CONTINUE;
@@ -822,6 +844,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bell_sensor == bodyA)
 	{
 		change_sensor = true;
+		App->audio->PlayFx(BellFx);
 		return;
 	}
 
@@ -903,7 +926,6 @@ Bonus::Bonus(ModuleSceneIntro * scene, uint fx, int bonusValue, PhysBody * bonus
 Brain::Brain(ModuleSceneIntro * scene, uint points,uint fx, PhysBody * brainBody) :
 	 points(points),fx(fx),brainBody(brainBody)
 {
-	brainBody->width += brainBody->width;
 }
 Squeleton::Squeleton(ModuleSceneIntro * scene, uint points, uint fx, int number, PhysBody * squeletonBody) :
 	points(points), fx(fx),number(number), squeletonBody(squeletonBody)
