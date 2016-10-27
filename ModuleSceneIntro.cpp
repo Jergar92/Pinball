@@ -86,7 +86,7 @@ bool ModuleSceneIntro::Start()
 	
 	//ADD BALL
 	ball = App->physics->CreateCircle(305, 750, 6, 1, 0, ball_texture);
-	ball->body->IsBullet();
+	ball->body->SetBullet(true);
 
 
 	//ADD BRAIN
@@ -137,33 +137,33 @@ bool ModuleSceneIntro::Start()
 		-1, 20 };
 
 	int grave_4_chain[12] = {-1, 36,
-	4, 42,
-	31, 32,
-	29, 26,
-	22, 24,
-	0, 31};
+		4, 42,
+		31, 32,
+		29, 26,
+		22, 24,
+		0, 31};
 
 	chains.add(App->physics->CreateChain(100,10, grave_4_chain, 12, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(200, 40, grave_2_chain, 10, 0));
+	chains.add(App->physics->CreateChain(200, 15, grave_2_chain, 10, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 2, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(83, 355, grave_4_chain, 12, 0));
+	chains.add(App->physics->CreateChain(65, 335, grave_4_chain, 12, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(78, 408, grave_4_chain, 12, 0));
+	chains.add(App->physics->CreateChain(60, 400, grave_4_chain, 12, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(146, 385, grave_3_chain, 10, 0));
+	chains.add(App->physics->CreateChain(135, 375, grave_3_chain, 10, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(202, 408, grave_2_chain, 10, 0));
+	chains.add(App->physics->CreateChain(185, 390, grave_2_chain, 10, 0));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
