@@ -124,7 +124,8 @@ bool ModuleSceneIntro::Start()
 		2, 25,
 		23, 26 };
 
-	int grave_2_chain[10] = { 1, 27,
+	int grave_2_chain[10] = {
+		1, 27,
 		9, 20,
 		33, 33,
 		24, 40,
@@ -143,57 +144,57 @@ bool ModuleSceneIntro::Start()
 		22, 24,
 		0, 31};
 
-	chains.add(App->physics->CreateChain(100,10, grave_4_chain, 12, 0));
+	chains.add(App->physics->CreateChain(100,5, grave_4_chain, 12, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(200, 15, grave_2_chain, 10, 0));
+	chains.add(App->physics->CreateChain(190, 10, grave_2_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 2, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(65, 335, grave_4_chain, 12, 0));
+	chains.add(App->physics->CreateChain(65, 335, grave_4_chain, 12, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(60, 400, grave_4_chain, 12, 0));
+	chains.add(App->physics->CreateChain(60, 400, grave_4_chain, 12, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(135, 375, grave_3_chain, 10, 0));
+	chains.add(App->physics->CreateChain(135, 375, grave_3_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(185, 390, grave_2_chain, 10, 0));
+	chains.add(App->physics->CreateChain(185, 390, grave_2_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(235, 390, grave_2_chain, 10, 0));
+	chains.add(App->physics->CreateChain(218, 360, grave_2_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
 	//////
-	circles.add(App->physics->CreateChain(27, 610, grave_4_chain, 12, 0));
+	circles.add(App->physics->CreateChain(24, 600, grave_4_chain, 12, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(98, 640, grave_3_chain, 10, 0));
+	circles.add(App->physics->CreateChain(98, 640, grave_3_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[2], 3, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(240, 607, grave_2_chain, 10, 0));
+	circles.add(App->physics->CreateChain(230, 607, grave_2_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	circles.add(App->physics->CreateChain(40, 684, grave_4_chain, 12, 0));
+	circles.add(App->physics->CreateChain(45, 680, grave_4_chain, 12, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[3], 4, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
 
-	circles.add(App->physics->CreateChain(207, 653, grave_2_chain, 10, 0));
+	circles.add(App->physics->CreateChain(190, 653, grave_2_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[1], 2, circles.getLast()->data));
 	circles.getLast()->data->listener = this;
 
-	chains.add(App->physics->CreateChain(250, 680, grave_1_chain, 10, 0));
+	chains.add(App->physics->CreateChain(230, 680, grave_1_chain, 10, 0, 1.0f));
 	headstone.add(new HeadStone(this, 10, 25, gravesFx[0], 1, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 
@@ -269,11 +270,11 @@ bool ModuleSceneIntro::Start()
 
 
 	
-	chains.add(App->physics->CreateChain(180, 740, bumper_left,18,0, 3.0f));
+	chains.add(App->physics->CreateChain(175, 740, bumper_left,18,0, 1.3f));
 	bumpers.add(new Bumper(this,5, bumperFx,0,chains.getLast()->data));
 	chains.getLast()->data->listener = this; 
 	
-	chains.add(App->physics->CreateChain(50, 740, bumper_right, 18, 0,3.0f));
+	chains.add(App->physics->CreateChain(55, 740, bumper_right, 18, 0, 1.3f));
 	bumpers.add(new Bumper(this, 5, bumperFx, 1, chains.getLast()->data));
 	chains.getLast()->data->listener = this;
 	// Pivot 0, 0
